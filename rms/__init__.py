@@ -4,9 +4,6 @@ from rms.db import db
 from rms.users.models import User
 
 
-
-
-
 def create_app():
         app = Flask(__name__)
         app.config.from_pyfile('config.py')
