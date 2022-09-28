@@ -9,10 +9,4 @@ def create_app():
     app.config.from_pyfile('config.py')
     db.init_app(app)
     migrate = Migrate(app, db)
-
-    # TODO delete route
-    @app.route('/')
-    def index():
-        return 'Hello world'
-
     return app
