@@ -1,1 +1,4 @@
-flask
+Flask==2.2.2
+psycopg2-binary==2.9.3
+sqlalchemy==1.4.41
+sqlalchemy_mptt==0.2.5
