@@ -1,12 +1,8 @@
-import enum
-
 from rms import db
 from flask_login import UserMixin
+from rms.users.enums import Roles
 from werkzeug.security import generate_password_hash, check_password_hash
 
-class Roles(enum.Enum):
-    ADMIN = 'admin'
-    USER = 'user'
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
