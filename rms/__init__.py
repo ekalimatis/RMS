@@ -1,7 +1,10 @@
 from flask import Flask
 from flask_migrate import Migrate
+
+
 from rms.db import db
 from rms.users.models import User
+from rms.requirements.models import Requirement
 
 
 def create_app():
