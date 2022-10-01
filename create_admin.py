@@ -1,5 +1,7 @@
-from getpass import getpass
 import sys
+
+from getpass import getpass
+
 from rms import create_app
 from rms.db import db
 from rms.users.models import User
