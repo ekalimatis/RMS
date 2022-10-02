@@ -1,4 +1,8 @@
+import datetime
+
 from sqlalchemy_mptt.mixins import BaseNestedSets
+from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 
 
 from rms import db
@@ -6,28 +10,31 @@ from rms.requirements.enums import Requirement_status
 
 
 class Project(db.Model):
+    __tablename__ = 'project'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(240))
+    name = db.Column(db.String(240), nullable=False)
     description = db.Column(db.Text())
-    created_date = db.Column(db.DateTime())
+    created_date = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+    relationship("RequirementTree", backref="project")
 
     def __repr__(self):
         return self.name
 
 
 class Requirement(db.Model):
+    __tablename__ = 'requirement'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(240))
-    requirement = db.Column(db.Text())
-    created_date = db.Column(db.DateTime())
-    update_date = db.Column(db.DateTime())
+    name = db.Column(db.String(240), nullable=False)
+    description = db.Column(db.Text())
+    created_date = db.Column(db.DateTime(), default=datetime.datetime.utcnow())
+    update_date = db.Column(db.DateTime(), onupdate=datetime.datetime.utcnow())
     approve = db.Column(db.Boolean())
     verify_id = db.Column(db.Integer())
     status = db.Column(db.Enum(Requirement_status))
     author_id = db.Column(db.Integer())
     tags = db.Column(db.String())
-    parent_id = db.Column(db.Integer())
-    project_id = db.Column(db.Integer())
+    parent_id = db.Column(db.Integer(), db.ForeignKey('requirement_tree.id'))
+    project_id = db.Column(db.Integer(), db.ForeignKey('project.id'))
     test_id = db.Column(db.Integer())
     task_id = db.Column(db.Integer())
     priorty_id = db.Column(db.Integer())
@@ -40,10 +47,12 @@ class Requirement(db.Model):
         return self.name
 
 
-class requirement_tree(db.Model, BaseNestedSets):
+class RequirementTree(db.Model, BaseNestedSets):
+    __tablename__ = 'requirement_tree'
     id = db.Column(db.Integer(), primary_key=True)
-    project_id = db.Column(db.Integer())
+    project_id = db.Column(db.Integer(), db.ForeignKey('project.id'))
     requirement_id = db.Column(db.Integer())
+    relationship("Requirement", backref="requirement_tree")
 
     def __repr__(self):
         return f'{self.project_id} - {self.requirement_id}'

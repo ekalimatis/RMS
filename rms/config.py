@@ -7,7 +7,7 @@ load_dotenv()
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 #SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, '..', 'rms.db')
-SQLALCHEMY_DATABASE_URI = os.getenv("POSTGRESQL_URI")
+SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI")
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
