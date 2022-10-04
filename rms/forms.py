@@ -6,12 +6,6 @@ from wtforms import StringField, DateTimeField, TextAreaField, SubmitField, Sele
 from wtforms.validators import DataRequired
 
 
-#
-# with app.app_context():
-#     def get_list_of_status():
-#         return db.session.query(RequirementTree).filter(RequirementTree.id == 19)
-
-
 class RequirementForm(FlaskForm):
 
     name = StringField('Требование', validators=[DataRequired()],

@@ -14,6 +14,7 @@ def create_app():
     app.config.from_pyfile('config.py')
     db.init_app(app)
     migrate = Migrate(app, db,  compare_server_default=True)
+    return app
 
     @app.route('/create_requirement')
     def create_requirement():
