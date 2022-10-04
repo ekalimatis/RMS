@@ -55,3 +55,29 @@ class Requirement(db.Model):
     def __repr__(self):
         return self.name
 
+class RequirementStatuses(db.Model):
+    __tablename__ = 'requirement_statuses'
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return self.status
+
+class RequirementPriority(db.Model):
+    __tablename__ = 'requirement_priority'
+    id = db.Column(db.Integer, primary_key=True)
+    priority = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return self.priority
+
+class RequirementTypes(db.Model):
+    __tablename__ = 'requirement_types'
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String(30), nullable=False)
+
+    def __repr__(self):
+        return self.type
+
+
+

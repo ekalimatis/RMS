@@ -5,8 +5,17 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, DateTimeField, TextAreaField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 
+from rms.db import db
+from rms.requirements.models import RequirementStatuses, RequirementPriority, RequirementTypes
+
 
 class RequirementForm(FlaskForm):
+
+    def __init__(self, *args, **kwargs):
+        super(RequirementForm, self).__init__(*args, **kwargs)
+        self.status.choices = db.session.query(RequirementStatuses).all()
+        self.priorty_id.choices = db.session.query(RequirementPriority).all()
+        self.type_id.choices = db.session.query(RequirementTypes).all()
 
     name = StringField('Требование', validators=[DataRequired()],
                        render_kw={"class": "form-control"})

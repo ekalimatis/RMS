@@ -18,8 +18,6 @@ def create_app():
     @app.route('/create_requirement')
     def create_requirement():
         requirement_form = RequirementForm()
-        list_of_projects=db.session.query(Project).all()
-        requirement_form.status.__setattr__('choices', list_of_projects)
         return render_template('create_requirement.html', form = requirement_form)
 
     return app
