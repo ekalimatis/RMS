@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <div class="wrapper">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ form.name.label }}
+                {{ form.name() }}
+            </div>
+            <div class="form-group col-md-3">
+                {{ form.type_id.label }}
+                {{ form.type_id() }}
+            </div>
+            <div class="form-group col-md-3">
+                {{ form.priorty_id.label }}
+                {{ form.priorty_id() }}
+            </div>
+        </div>
+        <br>
+        <div class="=form-row">
+                {{ form.description() }}
+        </div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ form.created_date.label }}
+                {{ form.created_date() }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ form.update_date.label }}
+                {{ form.update_date() }}
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ form.tags.label }}
+                {{ form.tags() }}
+            </div>
+            <div class="form-group col-md-4">
+                {{ form.status.label }}
+                {{ form.status() }}
+                    <option selected>Статус</option>
+                </select>
+            </div>
+        <div class="form-group col-md-2">
+            {{ form.release.label }}
+            {{ form.release() }}
+        </div>
+    </div>
+    <br>
+    </div>
+    {{ form.submit }}
+</form>
+{% endblock %}
