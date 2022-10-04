@@ -130,3 +130,6 @@ dmypy.json
 .pyre/
 # MacOS
 .DS_Store
+
+#local files
+init_db.bat
