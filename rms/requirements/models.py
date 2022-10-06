@@ -6,7 +6,6 @@ from sqlalchemy.orm import relationship
 
 
 from rms import db
-from rms.requirements.enums import Requirement_status
 
 
 class Project(db.Model):
@@ -24,7 +23,6 @@ class RequirementTree(db.Model, BaseNestedSets):
     __tablename__ = 'requirement_tree'
     id = db.Column(db.Integer(), primary_key=True)
     project_id = db.Column(db.Integer(), db.ForeignKey('project.id'))
-    requirement_id = db.Column(db.Integer())
     requirements = relationship("Requirement", backref="requirement_tree")
 
     def __repr__(self):
@@ -39,18 +37,21 @@ class Requirement(db.Model):
     update_date = db.Column(db.DateTime(), nullable=False, onupdate=datetime.datetime.utcnow())
     approve = db.Column(db.Boolean())
     verify_id = db.Column(db.Integer())
-    status = db.Column(db.Enum(Requirement_status))
+    status_id = db.Column(db.Integer(), db.ForeignKey('requirement_statuses.id'))
     author_id = db.Column(db.Integer())
     tags = db.Column(db.String())
-    parent_id = db.Column(db.Integer(), db.ForeignKey('requirement_tree.id'))
+    requirement_id = db.Column(db.Integer(), db.ForeignKey('requirement_tree.id'))
     project_id = db.Column(db.Integer(), db.ForeignKey('project.id'))
     test_id = db.Column(db.Integer())
     task_id = db.Column(db.Integer())
-    priorty_id = db.Column(db.Integer())
+    priority_id = db.Column(db.Integer(), db.ForeignKey('requirement_priority.id'))
     history_log = db.Column(db.Integer())
     version = db.Column(db.String(20))
-    type_id = db.Column(db.Integer())
+    type_id = db.Column(db.Integer(), db.ForeignKey('requirement_types.id'))
     release = db.Column(db.String(20))
+    priority = relationship('RequirementPriority', backref='requirements')
+    status = relationship('RequirementStatuses', backref='requirements')
+    type = relationship('RequirementTypes', backref='requirements')
 
     def __repr__(self):
         return self.name

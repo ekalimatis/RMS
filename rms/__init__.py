@@ -1,23 +1,15 @@
-from flask import Flask, render_template, flash, redirect, url_for
+from flask import Flask
 from flask_migrate import Migrate
-from flask_login import LoginManager, current_user, login_required
+
 
 from rms.db import db
-from rms.users.models import User
-from rms.requirements.models import Requirement
-from rms.forms import RequirementForm
-from rms.requirements.models import Project, db, Requirement, RequirementTree
-
+from rms.requirements.views import blueprint as requirements_blueprint
 
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
     db.init_app(app)
     migrate = Migrate(app, db,  compare_server_default=True)
-
-    @app.route('/create_requirement')
-    def create_requirement():
-        requirement_form = RequirementForm()
-        return render_template('create_requirement.html', form = requirement_form)
+    app.register_blueprint(requirements_blueprint)
 
     return app
