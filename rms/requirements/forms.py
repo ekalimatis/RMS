@@ -17,14 +17,6 @@ class RequirementForm(FlaskForm):
     description = TextAreaField('Описание', validators=[DataRequired()],
           render_kw={"class": "form-control"})
 
-    created_date = DateTimeField('Дата создания:', validators=[DataRequired()],
-                       render_kw={"class": "form-control", 'disabled':'True',
-                                  "style": "width:200px"}, default=datetime.now())
-
-    update_date = DateTimeField('Дата обновления:', validators=[DataRequired()],
-                       render_kw={"class": "form-control", "disabled": "True",
-                                  "style": "width:200px", "style": "width:200px"},
-                                default=datetime.now())
     tags = StringField('Тэги', render_kw={"class": "form-control"})
 
     priority = SelectField('Важность', render_kw={"class": "form-control"})

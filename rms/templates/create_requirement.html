@@ -3,91 +3,77 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-<form action="{{ url_for('requirements.save_requirement') }}" method="post">
-    {{ form.hidden_tag() }}
-    <div class="wrapper">
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                {{ form.requirement.label }}
-                {{ form.requirement() }}
+        <form action="{{ url_for('requirements.save_requirement') }}" method="post">
+            {{ form.hidden_tag() }}
+            <div class="wrapper">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form.requirement.label }}
+                        {{ form.requirement() }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{ form.project.label }}
+                        {{ form.project() }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form.name.label }}
+                        {{ form.name() }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {{ form.type.label }}
+                        {{ form.type() }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {{ form.priority.label }}
+                        {{ form.priority() }}
+                    </div>
+                </div>
+                <br>
+                <div class="=form-row">
+                    {{ form.description() }}
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        {{ form.tags.label }}
+                        {{ form.tags() }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        {{ form.status.label }}
+                        {{ form.status() }}
+                    </div>
+                    <div class="form-group col-md-2">
+                        {{ form.release.label }}
+                        {{ form.release() }}
+                    </div>
+                </div>
             </div>
-            <div class="form-group col-md-6">
-                {{ form.project.label }}
-                {{ form.project() }}
+            <div>
+                {{ form.submit }}
             </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                {{ form.name.label }}
-                {{ form.name() }}
-            </div>
-            <div class="form-group col-md-3">
-                {{ form.type.label }}
-                {{ form.type() }}
-            </div>
-            <div class="form-group col-md-3">
-                {{ form.priority.label }}
-                {{ form.priority() }}
-            </div>
-        </div>
-        <br>
-        <div class="=form-row">
-                {{ form.description() }}
-        </div>
-        <br>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                {{ form.created_date.label }}
-                {{ form.created_date() }}
-            </div>
-            <div class="form-group col-md-6">
-                {{ form.update_date.label }}
-                {{ form.update_date() }}
-            </div>
-        </div>
-        <br>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                {{ form.tags.label }}
-                {{ form.tags() }}
-            </div>
-            <div class="form-group col-md-4">
-                {{ form.status.label }}
-                {{ form.status() }}
-            </div>
-        <div class="form-group col-md-2">
-            {{ form.release.label }}
-            {{ form.release() }}
-        </div>
+        </form>
     </div>
-    <br>
-    </div>
-    {{ form.submit }}
-    </div>
-</form>
-    <script>
-        let project_select = document.getElementById('project');
-        let requirement_select = document.getElementById('requirement');
+</div>
+<script>
+    let project_select = document.getElementById('project');
+    let requirement_select = document.getElementById('requirement');
 
-        project_select.onchange = function() {
-            project = project_select.value;
+    project_select.onchange = function() {
+        project = project_select.value;
 
-            fetch('/requirements/project/' + project).then(function(response) {
-               response.json().then(function(data) {
+        fetch('/requirements/project/' + project).then(function(response) {
+            response.json().then(function(data) {
                 let optionHTML = '';
-
-                console.log(data)
 
                 for (let requirement of data.requirements) {
                     optionHTML += '<option value="' + requirement.id + '">' + requirement.name + '</option>';
                 }
 
                 requirement_select.innerHTML = optionHTML;
-
-               });
             });
-        }
-
-    </script>
-</div>
+        });
+    }
+</script>
 {% endblock %}
