@@ -27,7 +27,6 @@ def create_requirement():
 @blueprint.route('/project/<project>')
 def get_requirement(project):
     nodes = db.session.query(RequirementTree).filter(RequirementTree.project_id == project).all()
-
     tree = {}
     requirement_list = [{'id': 0, 'name': ""}]
 
@@ -38,11 +37,10 @@ def get_requirement(project):
         requirement_chain = str(node.requirements)
         node_id = node.id
 
-        while node.requirement_id:
-            node = tree[node.requirement_id]
+        while node.parent_id:
+            node = tree[node.parent_id]
             requirement_chain = str(node.requirements) + ' -> ' + requirement_chain
         requirement_list.append({'id' : node_id, 'name': requirement_chain})
-
     return jsonify({'requirements': requirement_list})
 
 

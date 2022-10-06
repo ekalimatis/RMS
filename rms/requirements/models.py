@@ -26,7 +26,7 @@ class RequirementTree(db.Model, BaseNestedSets):
     requirements = relationship("Requirement", backref="requirement_tree")
 
     def __repr__(self):
-        return f'{self.project_id} - {self.requirement_id}'
+        return f'{self.project_id} - {self.id}'
 
 class Requirement(db.Model):
     __tablename__ = 'requirement'
