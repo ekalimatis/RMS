@@ -4,7 +4,6 @@ from sqlalchemy_mptt.mixins import BaseNestedSets
 from sqlalchemy.sql import text
 from sqlalchemy.orm import relationship
 
-
 from rms import db
 
 

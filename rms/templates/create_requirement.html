@@ -56,24 +56,5 @@
         </form>
     </div>
 </div>
-<script>
-    let project_select = document.getElementById('project');
-    let requirement_select = document.getElementById('requirement');
-
-    project_select.onchange = function() {
-        project = project_select.value;
-
-        fetch('/requirements/project/' + project).then(function(response) {
-            response.json().then(function(data) {
-                let optionHTML = '';
-
-                for (let requirement of data.requirements) {
-                    optionHTML += '<option value="' + requirement.id + '">' + requirement.name + '</option>';
-                }
-
-                requirement_select.innerHTML = optionHTML;
-            });
-        });
-    }
-</script>
+<script src="{{ url_for('static', filename='/js/get_requirements_list.js') }}"></script>
 {% endblock %}
