@@ -4,7 +4,7 @@ let requirement_select = document.getElementById('requirement');
 project_select.addEventListener("change", function() {
     project_id = project_select.value;
 
-    fetch('/requirements/project/' + project_id).then(function(response) {
+    fetch('/requirements/requirement_list/' + project_id).then(function(response) {
         response.json().then(function(data) {
             let optionHTML = '';
 

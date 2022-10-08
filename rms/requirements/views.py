@@ -14,7 +14,7 @@ def create_requirement():
     return render_template('create_requirement.html', form=requirement_form)
 
 
-@blueprint.route('/project/<project_id>')
+@blueprint.route('/requirement_list/<project_id>')
 def get_requirements_list(project_id):
     requirement_list = make_requirements_list(project_id)
     return jsonify({'requirements': requirement_list})
