@@ -4,8 +4,8 @@ from getpass import getpass
 
 from rms import create_app
 from rms.db import db
-from rms.users.models import User
-from rms.users.enums import Roles
+from rms.user.models import User
+from rms.user.enums import Roles
 
 app = create_app()
 
