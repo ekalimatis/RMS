@@ -38,11 +38,6 @@ def process_login():
     return redirect(url_for('user.login'))
 
 
-@blueprint.route("/unauthorized")
-def unauthorized():
-    return render_template('user/unauthorized.html')
-
-
 @blueprint.route("/logout")
 def logout():
     logout_user()
