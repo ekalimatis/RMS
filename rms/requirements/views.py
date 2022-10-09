@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
 
 from rms.requirements.forms import RequirementForm
 from rms.requirements.requirements import save_requirement_in_bd, make_requirements_list
@@ -23,5 +23,9 @@ def get_requirements_list(project_id):
 @blueprint.route('save', methods=['POST'])
 def save_requirement():
     requirement_form = RequirementForm()
-    save_requirement_in_bd(requirement_form)
-    return redirect(url_for('requirements.create_requirement'))
+    if requirement_form.project.data == '0':
+        flash('Выберите проект!')
+        return render_template('create_requirement.html', form=requirement_form)
+    else:
+        save_requirement_in_bd(requirement_form)
+        return redirect(url_for('requirements.create_requirement'))
