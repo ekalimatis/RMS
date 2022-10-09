@@ -4,8 +4,9 @@ from flask_login import LoginManager
 
 from rms.db import db
 from rms.user.models import User
-from rms.requirements.models import Requirement
 from rms.user.views import blueprint as user_blueprint
+from rms.requirements.views import blueprint as requirements_blueprint
+
 
 
 def create_app():
@@ -19,6 +20,7 @@ def create_app():
     login_manager.login_view = 'users.login'
 
     app.register_blueprint(user_blueprint)
+    app.register_blueprint(requirements_blueprint)
 
     @login_manager.user_loader
     def load_user(user_id):
