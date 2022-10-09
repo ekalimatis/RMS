@@ -5,7 +5,6 @@ from flask import Blueprint, render_template, redirect, url_for, request, jsonif
 from rms.requirements.forms import RequirementForm
 from rms.requirements.requirements import save_requirement_in_bd, make_requirements_list, get_plain_requirement_text
 
-
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
 
 @blueprint.route('/create_requirement/', methods=['GET'])

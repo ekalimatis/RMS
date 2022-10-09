@@ -18,7 +18,8 @@ project_select.addEventListener("change", function() {
     });
         fetch('/requirements/requirement_doc/' + project_id).then(function(response) {
         response.json().then(function(data) {
-            let doc_HTML = data.requirement_doc;
+
+            let doc_HTML = data.requirement_doc != '' ? data.requirement_doc : '';
 
             requirement_doc.innerHTML = doc_HTML;
         });
