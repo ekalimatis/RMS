@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
 
 from rms.requirements.forms import RequirementForm
