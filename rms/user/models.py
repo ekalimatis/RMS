@@ -1,6 +1,6 @@
 from rms import db
 from flask_login import UserMixin
-from rms.users.enums import Roles
+from rms.user.enums import Roles
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
