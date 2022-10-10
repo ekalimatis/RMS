@@ -57,11 +57,12 @@ def make_requirements_list(project_id:int) -> list:
 
 def get_plain_requirement_text(project_id:int) -> str:
 
-    max_requirement_level = \
-    db.session.query(func.max(RequirementTree.level)).filter(RequirementTree.project_id == project_id).one()[0]
+    max_requirement_level = db.session.query(func.max(RequirementTree.level)).filter(
+        RequirementTree.project_id == project_id).one()[0]
+    print(max_requirement_level )
 
-    requirement_nodes_list = db.session.query(RequirementTree).filter(RequirementTree.project_id == project_id).order_by(RequirementTree.level).order_by(
-        RequirementTree.created_date).all()
+    requirement_nodes_list = db.session.query(RequirementTree).filter(
+        RequirementTree.project_id == project_id).order_by(RequirementTree.level).order_by(RequirementTree.created_date).all()
 
     requirement_list = []
     requirement_dict = {}
