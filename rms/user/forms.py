@@ -33,6 +33,8 @@ class UserCreationForm(FlaskForm):
                              validators=[DataRequired()],
                              render_kw={"class": "form-control"})
 
-    user_role = SelectField('Роль', choices=[(choice, choice.name) for choice in Roles], render_kw={"class": "form-control"})
+    user_role = SelectField('Роль',
+                            choices=[(choice, choice.name) for choice in Roles],
+                            render_kw={"class": "form-control"})
 
     submit = SubmitField('Отправить!', render_kw={"class": "btn btn-primary"})

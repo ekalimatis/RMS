@@ -57,6 +57,7 @@ def create():
 @blueprint.route("/process-create", methods=['POST'])
 def process_create():
     create_form = UserCreationForm()
+    #print(create_form.)
     if create_form.validate_on_submit():
         new_user = User(username=create_form.username.data,
                         role=create_form.user_role.data)
@@ -65,3 +66,10 @@ def process_create():
         db.session.commit()
         flash("Создан пользователь")
         return redirect(url_for('user.index'))
+    else:
+        for field, errors in create_form.errors.items():
+            for error in errors:
+                flash('Ошибка в поле {}: {}'.format(
+                    getattr(create_form, field).label.text,error
+                ))
+        return redirect(url_for('user.create'))
