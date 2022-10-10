@@ -32,4 +32,3 @@ def save_project_in_bd(form):
     db.session.add(project)
     db.session.commit()
     tree_manager.register_events()
-    #RequirementTree.rebuild_tree(db.session, 1)
