@@ -12,6 +12,7 @@ class RequirementTree(db.Model, BaseNestedSets):
     id = db.Column(db.Integer(), primary_key=True)
     project_id = db.Column(db.Integer(), db.ForeignKey('project.id'))
     requirements = relationship("Requirement", backref="requirement_tree")
+    created_date = db.Column(db.DateTime(), nullable=False, server_default=db.text('(now() at time zone \'utc0\')'))
 
     def __repr__(self):
         return f'{self.project_id} - {self.id}'

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
 
 from rms.requirements.forms import RequirementForm
-from rms.requirements.requirements import save_requirement_in_bd, make_requirements_list
+from rms.requirements.requirements import save_requirement_in_bd, make_requirements_list, get_plain_requirement_text
 
 
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
@@ -17,6 +17,10 @@ def get_requirements_list(project_id):
     requirement_list = make_requirements_list(project_id)
     return jsonify({'requirements': requirement_list})
 
+@blueprint.route('/requirement_doc/<project_id>')
+def get_requirement_doc(project_id):
+    requirement_doc = get_plain_requirement_text(project_id)
+    return jsonify({'requirement_doc': requirement_doc})
 
 @blueprint.route('save', methods=['POST'])
 def save_requirement():
