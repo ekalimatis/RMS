@@ -64,8 +64,8 @@ def process_create():
         new_user.set_password(create_form.password.data)
         db.session.add(new_user)
         db.session.commit()
-        flash("Создан пользователь")
-        return redirect(url_for('user.index'))
+        flash(f"Создан пользователь {create_form.username.data}, c ролью {create_form.user_role.data}")
+        return redirect(url_for('user.create'))
     else:
         for field, errors in create_form.errors.items():
             for error in errors:
