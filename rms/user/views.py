@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, current_user
 
 from rms.db import db
 from rms.user.models import User
-from rms.user.forms import LoginForm
+from rms.user.forms import LoginForm, UserCreationForm
 
 blueprint = Blueprint('user', __name__, url_prefix='/users')
 
@@ -43,3 +43,25 @@ def logout():
     logout_user()
     flash("Вы успешно разлогинились")
     return redirect(url_for("user.login"))
+
+
+@blueprint.route("/create")
+def create():
+    title = "Cоздание нового пользователя"
+    create_form = UserCreationForm()
+    return render_template("user/create.html",
+                           page_title = title,
+                           form = create_form)
+
+
+@blueprint.route("/process-create", methods=['POST'])
+def process_create():
+    create_form = UserCreationForm()
+    if create_form.validate_on_submit():
+        new_user = User(username=create_form.username.data,
+                        role=create_form.user_role.data)
+        new_user.set_password(create_form.password.data)
+        db.session.add(new_user)
+        db.session.commit()
+        flash("Создан пользователь")
+        return redirect(url_for('user.index'))
