@@ -5,7 +5,8 @@ from wtforms import StringField, DateTimeField, TextAreaField, SubmitField, Sele
 from wtforms.validators import DataRequired
 
 from rms.db import db
-from rms.requirements.models import RequirementStatuses, RequirementPriority, RequirementTypes, Project
+from rms.requirements.models import RequirementStatuses, RequirementPriority, RequirementTypes
+from rms.projects.models import Project
 
 
 class RequirementForm(FlaskForm):

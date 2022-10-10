@@ -7,6 +7,8 @@
             {{ form.hidden_tag() }}
             <div class="wrapper">
                 <div class="form-row">
+                <div class="form-group col-md-8">
+                <div class="form-row">
                     <div class="form-group col-md-6">
                         {{ form.requirement.label }}
                         {{ form.requirement() }}
@@ -49,6 +51,10 @@
                         {{ form.release() }}
                     </div>
                 </div>
+                </div>
+                <div class="form-group col-md-4" id="requirement_doc" style="width: 500px;">
+                </div>
+            </div>
             </div>
             <div>
                 {{ form.submit }}

@@ -6,6 +6,7 @@ from rms.db import db
 from rms.user.models import User
 from rms.user.views import blueprint as user_blueprint
 from rms.requirements.views import blueprint as requirements_blueprint
+from rms.projects.views import blueprint as projects_blueprint
 
 
 
@@ -21,6 +22,7 @@ def create_app():
 
     app.register_blueprint(user_blueprint)
     app.register_blueprint(requirements_blueprint)
+    app.register_blueprint(projects_blueprint)
 
     @login_manager.user_loader
     def load_user(user_id):
