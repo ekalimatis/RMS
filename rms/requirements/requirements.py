@@ -10,25 +10,30 @@ from rms.requirements.forms import RequirementForm
 
 def save_requirement_in_bd(form):
 
-    node = RequirementTree(
-        parent_id = form.requirement.data,
-        project_id = form.project.data
-    )
+    requirement_value = {
+        'name': form.name.data,
+        'description': form.description.data,
+        'status_id': form.status.data,
+        'tags': form.tags.data,
+        'priority_id': form.priority.data,
+        'type_id': form.type.data,
+        'update_date': datetime.utcnow(),
+    }
 
-    requirement = Requirement(
-        name = form.name.data,
-        description = form.description.data,
-        created_date = datetime.utcnow(),
-        update_date = datetime.utcnow(),
-        status_id = form.status.data,
-        tags = form.tags.data,
-        priority_id = form.priority.data,
-        type_id = form.type.data
-    )
+    if form.id.data:
+        requirement = db.session.query(Requirement).filter(Requirement.id == form.id.data).one()
+        for key, value in requirement_value.items():
+            setattr(requirement,key,value)
+    else:
+        requirement_value['created_date'] = datetime.utcnow()
+        node = RequirementTree(
+                parent_id=form.requirement.data,
+                project_id=form.project.data
+            )
 
-    node.requirements.append(requirement)
-
-    db.session.add(node)
+        requirement = Requirement(**requirement_value)
+        node.requirements.append(requirement)
+        db.session.add(node)
     db.session.commit()
 
 def make_requirements_list(project_id:int) -> list:
@@ -44,7 +49,7 @@ def make_requirements_list(project_id:int) -> list:
     for node in tree_node_list:
         tree_node_dict[node.id] = node
 
-    requirement_list = [{'id': 0, 'name': "Выберите родительское требование"}]
+    requirement_list = []
     for node in tree_node_dict.values():
         requirement_chain = str(node.requirements)
         node_id = node.id

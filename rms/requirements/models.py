@@ -5,6 +5,7 @@ from sqlalchemy.sql import text
 from sqlalchemy.orm import relationship
 
 from rms import db
+from rms.user.models import User
 
 
 class RequirementTree(db.Model, BaseNestedSets):
@@ -29,7 +30,7 @@ class Requirement(db.Model):
     status_id = db.Column(db.Integer(), db.ForeignKey('requirement_statuses.id'))
     author_id = db.Column(db.Integer())
     tags = db.Column(db.String())
-    requirement_id = db.Column(db.Integer(), db.ForeignKey('requirement_tree.id'))
+    requirement_node_id = db.Column(db.Integer(), db.ForeignKey('requirement_tree.id'))
     project_id = db.Column(db.Integer(), db.ForeignKey('project.id'))
     test_id = db.Column(db.Integer())
     task_id = db.Column(db.Integer())
@@ -68,6 +69,14 @@ class RequirementTypes(db.Model):
 
     def __repr__(self):
         return self.type
+
+class AcceptRequirement(db.Model):
+    __tablename__ = 'accept_requirement'
+    id = db.Column(db.Integer, primary_key=True)
+    requirement_id = db.Column(db.Integer(), db.ForeignKey('requirement.id'), nullable=False)
+    accept_user = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
+    requirement = relationship("Requirement", backref="accepts")
+    user = relationship("User", backref="accept_requirements")
 
 
 

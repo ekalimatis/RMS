@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateTimeField, TextAreaField, SubmitField, SelectField, RadioField
+from wtforms import StringField, DateTimeField, TextAreaField, SubmitField, SelectField, RadioField, HiddenField
 from wtforms.validators import DataRequired
 
 from rms.db import db
@@ -10,6 +10,8 @@ from rms.projects.models import Project
 
 
 class RequirementForm(FlaskForm):
+
+    id = HiddenField()
 
     name = StringField('Требование', validators=[DataRequired()],
                        render_kw={"class": "form-control"})
@@ -45,4 +47,4 @@ class RequirementForm(FlaskForm):
         self.priority.choices = [(item.id, item.priority) for item in db.session.query(RequirementPriority).all()]
         self.type.choices = [(item.id, item.type) for item in db.session.query(RequirementTypes).all()]
         self.project.choices = project_list
-        self.requirement.choices = [(0, 'Выберите родительское требование')]
+        self.requirement.choices = []
