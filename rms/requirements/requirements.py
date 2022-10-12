@@ -26,10 +26,13 @@ def save_requirement_in_bd(form):
 
     if form.id.data:
         #Обновление
-        requirement_value['version'] = db.session.query(Requirement.version).filter(Requirement.id == form.id.data).one()[0] + 1
+        requirement_value['version'], requirement_value['requirement_node_id'] = db.session.query(
+            Requirement.version, Requirement.requirement_node_id).filter(Requirement.id == form.id.data).one()
+        requirement_value['version'] += 1
         # for key, value in requirement_value.items():
         #     setattr(requirement,key,value)
         requirement = Requirement(**requirement_value)
+        db.session.add(requirement)
 
     else:
         #Новое
@@ -59,14 +62,25 @@ def make_requirements_list(project_id:int) -> list:
     for node in tree_node_list:
         tree_node_dict[node.id] = node
 
+    current_created_date = datetime.fromtimestamp(0)
     requirement_list = []
     for node in tree_node_dict.values():
-        requirement_chain = str(node.requirements)
         node_id = node.id
+        for requirement in node.requirements:
+            if requirement.created_date > current_created_date:
+                print(node_id, requirement.created_date)
+                requirement_chain = str(requirement.name)
+                current_created_date = requirement.created_date
 
         while node.parent_id:
             node = tree_node_dict[node.parent_id]
-            requirement_chain = str(node.requirements) + ' -> ' + requirement_chain
+            current_created_date = datetime.fromtimestamp(0)
+            for requirement in node.requirements:
+                if requirement.created_date > current_created_date:
+                    requirement_name = str(requirement.name)
+                    current_created_date = requirement.created_date
+
+            requirement_chain = requirement_name + ' -> ' + requirement_chain
         requirement_list.append({'id': node_id, 'name': requirement_chain})
 
     return requirement_list
@@ -94,7 +108,7 @@ def get_plain_requirement_text(project_id:int) -> str:
 
     text = ''
     for node in requirement_list:
-        requirement = db.session.query(Requirement).filter(Requirement.requirement_node_id == node[1].id).order_by(Requirement.created_date.desc()).one()
+        requirement = db.session.query(Requirement).filter(Requirement.requirement_node_id == node[1].id).order_by(Requirement.created_date.desc()).first()
         indent = '&nbsp;' * len(str(node[0]).replace('0',''))
         text += f"{indent}{'.'.join(str(node[0]).replace('0',''))} {requirement.name}<br>{indent}{indent}{requirement.description}<br>"
 
