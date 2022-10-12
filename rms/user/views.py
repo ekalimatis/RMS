@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, current_user
 
 from rms.db import db
 from rms.user.models import User
+from rms.user.enums import Roles
 from rms.user.forms import LoginForm, UserCreationForm
 from rms.user.decorators import admin_required
 blueprint = Blueprint('user', __name__, url_prefix='/users')
@@ -49,7 +50,7 @@ def logout():
 @admin_required
 def create():
     title = "Cоздание нового пользователя"
-    create_form = UserCreationForm()
+    create_form = UserCreationForm(user_role=Roles.user)
     return render_template("user/create.html",
                            page_title = title,
                            form = create_form)
