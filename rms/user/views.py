@@ -59,7 +59,6 @@ def create():
 @admin_required
 def process_create():
     create_form = UserCreationForm()
-    #print(create_form.)
     if create_form.validate_on_submit():
         new_user = User(username=create_form.username.data,
                         role=create_form.user_role.data)
