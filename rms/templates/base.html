@@ -26,14 +26,14 @@
   </div>
     <div class="text-center">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 {% block tree_form %}{% endblock %}
             </div>
-            <div class="col-md-8">
+            <div class="col-md-6">
                 {% block content %}{% endblock %}
             </div>
-            <div class="col-md-2">
-                Column
+            <div class="col-md-3" style="text-align: justify">
+                {% block requirement_list %}{% endblock %}
             </div>
         </div>
     </div>

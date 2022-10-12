@@ -17,9 +17,12 @@ def get_requirement(requirement_id):
     requirement_json = {
         'id': requirement.id,
         'name': requirement.name,
-        'description': requirement.description
+        'description': requirement.description,
+        'status_id': requirement.status_id,
+        'tags': requirement.tags,
+        'priority_id': requirement.priority_id,
+        'type_id': requirement.type_id,
     }
-
     return {'requirement': requirement_json}
 
 @blueprint.route('/requirement_list/<project_id>')
@@ -37,7 +40,8 @@ def save_requirement():
     requirement_form = RequirementForm()
     if requirement_form.project.data == '0':
         flash('Выберите проект!')
-        return render_template('create_requirement.html', form=requirement_form)
     else:
         save_requirement_in_bd(requirement_form)
-        return redirect(url_for('requirements.create_requirement'))
+        flash('Требование сохранено!')
+
+    return {'ok': 200}

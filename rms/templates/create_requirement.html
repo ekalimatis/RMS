@@ -4,7 +4,7 @@
 <form action="{{ url_for('requirements.save_requirement') }}" method="post">
     {{ form.hidden_tag() }}
     <div class="form-row">
-        <div class="form-group col-md-8">
+        <div class="form-group col-md-12">
             <div class="form-row">
                 <div class="form-group col-md-6">
                         {{ form.name.label }}
@@ -58,4 +58,8 @@
 
 <select class="form-control" id="requirement" name="requirement">
 </select>
+{% endblock %}
+
+{% block requirement_list %}
+    <div id="requirement_doc"></div>
 {% endblock %}
