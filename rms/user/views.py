@@ -56,6 +56,7 @@ def create():
 
 
 @blueprint.route("/process-create", methods=['POST'])
+@admin_required
 def process_create():
     create_form = UserCreationForm()
     #print(create_form.)
