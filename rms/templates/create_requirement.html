@@ -1,66 +1,61 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <form action="{{ url_for('requirements.save_requirement') }}" method="post">
-            {{ form.hidden_tag() }}
-            <div class="wrapper">
-                <div class="form-row">
-                <div class="form-group col-md-8">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        {{ form.requirement.label }}
-                        {{ form.requirement() }}
-                    </div>
-                    <div class="form-group col-md-6">
-                        {{ form.project.label }}
-                        {{ form.project() }}
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
+<form action="{{ url_for('requirements.save_requirement') }}" method="post">
+    {{ form.hidden_tag() }}
+    <div class="form-row">
+        <div class="form-group col-md-8">
+            <div class="form-row">
+                <div class="form-group col-md-6">
                         {{ form.name.label }}
                         {{ form.name() }}
-                    </div>
-                    <div class="form-group col-md-3">
+                </div>
+                <div class="form-group col-md-3">
                         {{ form.type.label }}
                         {{ form.type() }}
-                    </div>
-                    <div class="form-group col-md-3">
+                </div>
+                <div class="form-group col-md-3">
                         {{ form.priority.label }}
                         {{ form.priority() }}
-                    </div>
                 </div>
+            </div>
                 <br>
-                <div class="=form-row">
+            <div class="=form-row">
                     {{ form.description() }}
-                </div>
+            </div>
                 <br>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
+            <div class="form-row">
+                <div class="form-group col-md-6">
                         {{ form.tags.label }}
                         {{ form.tags() }}
-                    </div>
-                    <div class="form-group col-md-4">
+                </div>
+                <div class="form-group col-md-4">
                         {{ form.status.label }}
                         {{ form.status() }}
-                    </div>
-                    <div class="form-group col-md-2">
+                </div>
+                <div class="form-group col-md-2">
                         {{ form.release.label }}
                         {{ form.release() }}
-                    </div>
-                </div>
-                </div>
-                <div class="form-group col-md-4" id="requirement_doc" style="width: 500px;">
                 </div>
             </div>
-            </div>
-            <div>
-                {{ form.submit }}
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+    <div>
+        {{ form.submit }}
+    </div>
+</form>
+
 <script src="{{ url_for('static', filename='/js/get_requirements_list.js') }}"></script>
+{% endblock %}
+
+{% block tree_form %}
+<select class="form-control" id="project" name="project">
+    <option value="0">Выберите проект</option>
+    <option value="1">Первый проект</option>
+    <option value="2">Проект 2</option>
+    <option value="3">Проект 3</option>
+</select>
+
+<select class="form-control" id="requirement" name="requirement">
+</select>
 {% endblock %}

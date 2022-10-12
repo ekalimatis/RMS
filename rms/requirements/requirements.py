@@ -8,6 +8,10 @@ from rms.requirements.models import RequirementTree, Requirement
 from rms.requirements.forms import RequirementForm
 
 
+def load_requirement(requirement_id):
+    requirement = db.session.query(Requirement).filter(Requirement.id == requirement_id).one()
+    return requirement
+
 def save_requirement_in_bd(form):
 
     requirement_value = {
@@ -84,7 +88,7 @@ def get_plain_requirement_text(project_id:int) -> str:
 
     text = ''
     for node in requirement_list:
-        requirement = db.session.query(Requirement).filter(Requirement.requirement_id == node[1].id).order_by(Requirement.created_date.desc()).one()
+        requirement = db.session.query(Requirement).filter(Requirement.requirement_node_id == node[1].id).order_by(Requirement.created_date.desc()).one()
         indent = '&nbsp;' * len(str(node[0]).replace('0',''))
         text += f"{indent}{'.'.join(str(node[0]).replace('0',''))} {requirement.name}<br>{indent}{indent}{requirement.description}<br>"
 
