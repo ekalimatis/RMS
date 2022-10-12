@@ -34,7 +34,11 @@ class UserCreationForm(FlaskForm):
                              render_kw={"class": "form-control"})
 
     user_role = SelectField('Роль',
-                            choices=[(choice, choice.name) for choice in Roles],
                             render_kw={"class": "form-control"})
 
     submit = SubmitField('Отправить!', render_kw={"class": "btn btn-primary"})
+
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
+        self.user_role.choices = [(choice, choice.name) for choice in Roles]
+
