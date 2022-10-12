@@ -12,6 +12,8 @@ from rms.projects.models import Project
 class RequirementForm(FlaskForm):
 
     id = HiddenField()
+    requirement_id = HiddenField()
+    project_id = HiddenField()
 
     name = StringField('Требование', validators=[DataRequired()],
                        render_kw={"class": "form-control"})
@@ -31,9 +33,9 @@ class RequirementForm(FlaskForm):
 
     submit = SubmitField('Сохранить', render_kw={"class": "btn btn-primary"})
 
-    requirement = SelectField('Родительское требование', render_kw={"class": "form-control"}, id='requirement')
-
-    project = SelectField('Проект', render_kw={"class": "form-control"}, id='project')
+    # requirement = SelectField('Родительское требование', render_kw={"class": "form-control"}, id='requirement')
+    #
+    # project = SelectField('Проект', render_kw={"class": "form-control"}, id='project')
 
     def __init__(self, *args, **kwargs):
         super(RequirementForm, self).__init__(*args, **kwargs)
@@ -46,5 +48,5 @@ class RequirementForm(FlaskForm):
         self.status.choices = [(item.id, item.status) for item in db.session.query(RequirementStatuses).all()]
         self.priority.choices = [(item.id, item.priority) for item in db.session.query(RequirementPriority).all()]
         self.type.choices = [(item.id, item.type) for item in db.session.query(RequirementTypes).all()]
-        self.project.choices = project_list
-        self.requirement.choices = []
+        #self.project.choices = project_list
+        #self.requirement.choices = []

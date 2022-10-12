@@ -38,10 +38,10 @@ def get_requirement_doc(project_id):
 @blueprint.route('save', methods=['POST'])
 def save_requirement():
     requirement_form = RequirementForm()
-    if requirement_form.project.data == '0':
+    if requirement_form.project_id.data == '0':
         flash('Выберите проект!')
     else:
         save_requirement_in_bd(requirement_form)
         flash('Требование сохранено!')
 
-    return {'ok': 200}
+    return render_template('create_requirement.html', form=requirement_form)
