@@ -36,7 +36,7 @@ class Requirement(db.Model):
     task_id = db.Column(db.Integer())
     priority_id = db.Column(db.Integer(), db.ForeignKey('requirement_priority.id'))
     history_log = db.Column(db.Integer())
-    version = db.Column(db.String(20))
+    version = db.Column(db.Integer())
     type_id = db.Column(db.Integer(), db.ForeignKey('requirement_types.id'))
     release = db.Column(db.String(20))
     priority = relationship('RequirementPriority', backref='requirements')

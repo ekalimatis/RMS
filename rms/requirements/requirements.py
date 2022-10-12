@@ -25,15 +25,16 @@ def save_requirement_in_bd(form):
     }
 
     if form.id.data:
-        print('Обновление')
-        requirement = db.session.query(Requirement).filter(Requirement.id == form.id.data).one()
-        for key, value in requirement_value.items():
-            setattr(requirement,key,value)
+        #Обновление
+        requirement_value['version'] = db.session.query(Requirement.version).filter(Requirement.id == form.id.data).one()[0] + 1
+        # for key, value in requirement_value.items():
+        #     setattr(requirement,key,value)
+        requirement = Requirement(**requirement_value)
+
     else:
-        print('Новое')
+        #Новое
         requirement_value['created_date'] = datetime.utcnow()
-        print(form.requirement_id.data)
-        print(form.project_id.data)
+        requirement_value['version'] = 1
 
         node = RequirementTree(
                 parent_id=form.requirement_id.data,
