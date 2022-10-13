@@ -23,9 +23,9 @@ with app.app_context():
         print("Пароли не совпадают.")
         sys.exit(1)
 
-    new_user = User(username=username, role=Roles.admin)
+    new_user = User(username=username, role=Roles.ADMIN)
     new_user.set_password(password1)
 
     db.session.add(new_user)
     db.session.commit()
-    print(f"Создан пользователь с id {new_user.id} и ролью {Roles.admin.value}")
+    print(f"Создан пользователь с id {new_user.id} и ролью {Roles.ADMIN.value}")
