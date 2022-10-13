@@ -26,7 +26,7 @@ class Requirement(db.Model):
     description = db.Column(db.Text())
     created_date = db.Column(db.DateTime(), nullable=False, server_default=db.text('(now() at time zone \'utc0\')'))
     update_date = db.Column(db.DateTime(), nullable=False, onupdate=datetime.datetime.utcnow())
-    approve = db.Column(db.Boolean())
+    approve = db.Column(db.Boolean(), default=False)
     verify_id = db.Column(db.Integer())
     status_id = db.Column(db.Integer(), db.ForeignKey('requirement_statuses.id'))
     author_id = db.Column(db.Integer())
