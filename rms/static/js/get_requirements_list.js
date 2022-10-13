@@ -64,3 +64,8 @@ function new_requirement(){
     document.getElementById('priority').value = null
     document.getElementById('type').value = null
 }
+
+function accept_requirement(){
+    requirement_id = requirement_select.value;
+    fetch('/requirements/accept/' + requirement_id)
+}

@@ -18,3 +18,6 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password, password)
+
+    def get_id(self):
+        return self.id

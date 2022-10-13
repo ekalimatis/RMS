@@ -2,6 +2,7 @@ import datetime
 
 from sqlalchemy_mptt.mixins import BaseNestedSets
 from sqlalchemy.sql import text
+from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from rms import db
@@ -77,6 +78,13 @@ class AcceptRequirement(db.Model):
     accept_user = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
     requirement = relationship("Requirement", backref="accepts")
     user = relationship("User", backref="accept_requirements")
+    __table_args__ = (
+        UniqueConstraint("requirement_id", "accept_user"),
+    )
+
+    def __init__(self, requirement_id, user_id):
+        self.requirement_id = requirement_id
+        self.accept_user = user_id
 
 
 

@@ -1,12 +1,16 @@
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
+from flask_login import current_user
 
 from rms.requirements.forms import RequirementForm
 from rms.requirements.requirements import *
+from rms.requirements.models import AcceptRequirement
+from rms.user.decorators import auth_required
 
 
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
 
 @blueprint.route('/create_requirement/', methods=['GET'])
+@auth_required
 def create_requirement():
     requirement_form = RequirementForm()
     return render_template('create_requirement.html', form=requirement_form)
@@ -45,3 +49,10 @@ def save_requirement():
         flash('Требование сохранено!')
 
     return render_template('create_requirement.html', form=requirement_form)
+
+@blueprint.route('accept/<requirement_id>')
+def accept(requirement_id):
+    accept_requirement = AcceptRequirement(requirement_id, current_user.get_id())
+    db.session.add(accept_requirement)
+    db.session.commit()
+    return 'status=200'
