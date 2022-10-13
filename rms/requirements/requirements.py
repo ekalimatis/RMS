@@ -9,7 +9,13 @@ from rms.requirements.forms import RequirementForm
 
 
 def load_requirement(requirement_id):
+    print(requirement_id)
     requirement = db.session.query(Requirement).filter(Requirement.id == requirement_id).one()
+    return requirement
+
+def get_last_requirement(node_id):
+    requirement = db.session.query(Requirement).filter(Requirement.requirement_node_id == node_id).order_by(
+        Requirement.created_date.desc()).first()
     return requirement
 
 def save_requirement_in_bd(form):
@@ -62,26 +68,17 @@ def make_requirements_list(project_id:int) -> list:
     for node in tree_node_list:
         tree_node_dict[node.id] = node
 
-    current_created_date = datetime.fromtimestamp(0)
     requirement_list = []
     for node in tree_node_dict.values():
-        node_id = node.id
-        for requirement in node.requirements:
-            if requirement.created_date > current_created_date:
-                print(node_id, requirement.created_date)
-                requirement_chain = str(requirement.name)
-                current_created_date = requirement.created_date
+        requirement = get_last_requirement(node.id)
+        requirement_chain = requirement.name
+        requirement_id = requirement.id
 
         while node.parent_id:
             node = tree_node_dict[node.parent_id]
-            current_created_date = datetime.fromtimestamp(0)
-            for requirement in node.requirements:
-                if requirement.created_date > current_created_date:
-                    requirement_name = str(requirement.name)
-                    current_created_date = requirement.created_date
-
-            requirement_chain = requirement_name + ' -> ' + requirement_chain
-        requirement_list.append({'id': node_id, 'name': requirement_chain})
+            requirement = get_last_requirement(node.id)
+            requirement_chain = requirement.name + ' -> ' + requirement_chain
+        requirement_list.append({'id': requirement_id, 'name': requirement_chain})
 
     return requirement_list
 
