@@ -9,7 +9,6 @@ from rms.requirements.forms import RequirementForm
 
 
 def load_requirement(requirement_id):
-    print(requirement_id)
     requirement = db.session.query(Requirement).filter(Requirement.id == requirement_id).one()
     return requirement
 
