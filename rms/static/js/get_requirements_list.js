@@ -47,6 +47,13 @@ function get_requirement(requirement_id) {
             document.getElementById('tags').value = data.requirement.tags
             document.getElementById('priority').value = data.requirement.priority_id
             document.getElementById('type').value = data.requirement.type_id
+
+            if (data.requirement.accept_but) {
+                document.getElementById('Accept').value = 'ОДОБРЕНО'
+            } else {
+                document.getElementById('Accept').value = 'Одобрить'
+            }
+
         });
     });
     }

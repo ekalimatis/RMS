@@ -86,5 +86,8 @@ class AcceptRequirement(db.Model):
         self.requirement_id = requirement_id
         self.accept_user = user_id
 
+    def get_user(self):
+        return self.accept_user
+
 
 

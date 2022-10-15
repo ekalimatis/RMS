@@ -18,6 +18,11 @@ def create_requirement():
 @blueprint.route('/get_requirement/<requirement_id>')
 def get_requirement(requirement_id):
     requirement = load_requirement(requirement_id)
+    accepted = False
+    for accept in requirement.accepts:
+        if accept.get_user() == current_user.get_id():
+            accepted = True
+
     requirement_json = {
         'id': requirement.id,
         'name': requirement.name,
@@ -27,6 +32,12 @@ def get_requirement(requirement_id):
         'priority_id': requirement.priority_id,
         'type_id': requirement.type_id,
     }
+
+    if accepted:
+        requirement_json['accept_but'] = True
+    else:
+        requirement_json['accept_but'] = False
+
     return {'requirement': requirement_json}
 
 @blueprint.route('/requirement_list/<project_id>')
@@ -52,7 +63,20 @@ def save_requirement():
 
 @blueprint.route('accept/<requirement_id>')
 def accept(requirement_id):
+    accept_rool = set(['user', 'admin']) #нужно где-то хранить правила
     accept_requirement = AcceptRequirement(requirement_id, current_user.get_id())
     db.session.add(accept_requirement)
     db.session.commit()
+
+    accepts = db.session.query(AcceptRequirement).filter(AcceptRequirement.requirement_id == requirement_id).all()
+    accept_users = []
+    for accept in accepts:
+        accept_users.append(accept.user.role.value)
+    accept_users = set(accept_users)
+    print(accept_users)
+    print(accept_rool)
+    if accept_rool == accept_users:
+        db.session.query(Requirement).filter(Requirement.id == requirement_id).update({"approve": True})
+        db.session.commit()
+
     return 'status=200'
