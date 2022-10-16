@@ -4,7 +4,7 @@ from flask import current_app, flash, request, redirect, url_for
 from flask_login import config, current_user
 
 
-def auth_required(func):
+def admin_required(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
         if request.method in config.EXEMPT_METHODS:
@@ -13,8 +13,8 @@ def auth_required(func):
             return func(*args, **kwargs)
         elif not current_user.is_authenticated:
             return current_app.login_manager.unauthorized()
-        elif not current_user.is_authenticated:
-            flash('Эта страница доступна только тем кто вошел')
+        elif not current_user.is_admin:
+            flash('Эта страница доступна только админам')
             return redirect(url_for('user.index'))
         return func(*args, **kwargs)
     return decorated_view

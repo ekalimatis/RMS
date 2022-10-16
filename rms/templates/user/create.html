@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-4">
+
+        <form action="{{ url_for('user.process_create') }}" method="POST">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ form.username.label }}<br>
+                {{ form.username() }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label }}<br>
+                {{ form.password() }}
+            </div>
+            <div class="form-group">
+                {{ form.user_role.label }}<br>
+                {{ form.user_role() }}
+            </div>
+            {{ form.submit }}
+        </form>
+    </div>
+    <div class="col-8">
+
+    </div>
+</div>
+{% endblock %}
