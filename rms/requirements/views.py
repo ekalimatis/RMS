@@ -73,8 +73,6 @@ def accept(requirement_id):
     for accept in accepts:
         accept_users.append(accept.user.role.value)
     accept_users = set(accept_users)
-    print(accept_users)
-    print(accept_rool)
     if accept_rool == accept_users:
         db.session.query(Requirement).filter(Requirement.id == requirement_id).update({"approve": True})
         db.session.commit()

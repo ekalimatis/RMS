@@ -9,6 +9,6 @@ from rms.projects.models import Project
 class ProjectForm(FlaskForm):
     name = StringField('Проект', validators=[DataRequired(), Length(max=240)], render_kw={"class": "form-control"})
 
-    description = StringField('Описание', validators=[DataRequired()],render_kw={"class": "form-control"})
+    description = StringField('Описание', validators=[DataRequired()], render_kw={"class": "form-control", 'style': 'height: 300px'})
 
     submit = SubmitField('Сохранить', render_kw={"class": "btn btn-primary"})

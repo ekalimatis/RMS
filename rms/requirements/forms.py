@@ -19,7 +19,7 @@ class RequirementForm(FlaskForm):
                        render_kw={"class": "form-control"})
 
     description = TextAreaField('Описание', validators=[DataRequired()],
-          render_kw={"class": "form-control"})
+          render_kw={"class": "form-control", 'style': 'height: 300px'})
 
     tags = StringField('Тэги', render_kw={"class": "form-control"})
 
