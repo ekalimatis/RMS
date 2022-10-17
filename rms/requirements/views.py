@@ -4,13 +4,13 @@ from flask_login import current_user
 from rms.requirements.forms import RequirementForm
 from rms.requirements.requirements import *
 from rms.requirements.models import AcceptRequirement
-from rms.user.decorators import auth_required
+from rms.user.decorators import admin_required
 
 
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
 
 @blueprint.route('/create_requirement/', methods=['GET'])
-@auth_required
+@admin_required
 def create_requirement():
     requirement_form = RequirementForm()
     return render_template('create_requirement.html', form=requirement_form)
