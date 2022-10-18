@@ -10,16 +10,20 @@ blueprint = Blueprint('projects', __name__, url_prefix='/projects')
 @blueprint.route('/create_project/', methods=['GET'])
 def create_project():
     project_form = ProjectForm()
-    return render_template('project/create_project.html', form=project_form)
+    return render_template('projects/create_project.html', form=project_form)
 
 @blueprint.route('save', methods=['POST'])
 def save_project():
     project_form = ProjectForm()
-    save_project_in_bd(project_form)
-    return redirect(url_for('requirements.create_requirement'))
+    if project_form.validate_on_submit():
+        save_project_in_bd(project_form)
+        return redirect(url_for('requirements.create_requirement'))
+    else:
+        return render_template('projects/create_project.html', form=project_form)
+
 
 
 @blueprint.route('/index',methods=['GET'])
 def list_projects():
     projects = Project.query.order_by(Project.created_date.desc()).all()
-    return render_template('project/index.html', project_list=projects)
+    return render_template('projects/index.html', project_list=projects)
