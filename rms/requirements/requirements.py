@@ -17,42 +17,50 @@ def get_last_requirement(node_id):
         Requirement.created_date.desc()).first()
     return requirement
 
-def save_requirement_in_bd(form):
-
+def upgrade_requirement(requirement_form):
     requirement_value = {
-        'name': form.name.data,
-        'description': form.description.data,
-        'status_id': form.status.data,
-        'tags': form.tags.data,
-        'priority_id': form.priority.data,
-        'type_id': form.type.data,
+        'name': requirement_form.name.data,
+        'description': requirement_form.description.data,
+        'status_id': requirement_form.status.data,
+        'tags': requirement_form.tags.data,
+        'priority_id': requirement_form.priority.data,
+        'type_id': requirement_form.type.data,
         'update_date': datetime.utcnow(),
+        'requirement_id': requirement_form.requirement_id.data,
+        'version':  db.session.query(Requirement.version).filter(Requirement.id == requirement_form.id.data).one() + 1,
     }
-
-    if form.id.data:
-        #Обновление
-        requirement_value['version'], requirement_value['requirement_id'] = db.session.query(
-            Requirement.version, Requirement.requirement_id).filter(Requirement.id == form.id.data).one()
-        requirement_value['version'] += 1
-        # for key, value in requirement_value.items():
-        #     setattr(requirement,key,value)
-        requirement = Requirement(**requirement_value)
-        db.session.add(requirement)
-
-    else:
-        #Новое
-        requirement_value['created_date'] = datetime.utcnow()
-        requirement_value['version'] = 1
-
-        node = RequirementTree(
-                parent_id=form.requirement_id.data,
-                project_id=form.project_id.data
-            )
-
-        requirement = Requirement(**requirement_value)
-        node.requirements.append(requirement)
-        db.session.add(node)
+    requirement = Requirement(**requirement_value)
+    db.session.add(requirement)
     db.session.commit()
+
+def create_new_requirement(requirement_form):
+    requirement_value = {
+        'name': requirement_form.name.data,
+        'description': requirement_form.description.data,
+        'status_id': requirement_form.status.data,
+        'tags': requirement_form.tags.data,
+        'priority_id': requirement_form.priority.data,
+        'type_id': requirement_form.type.data,
+        'update_date': datetime.utcnow(),
+        'requirement_id': requirement_form.requirement_id.data,
+        'created_date': datetime.utcnow(),
+        'version': 1,
+    }
+    node = RequirementTree(
+        parent_id=requirement_form.requirement_id.data,
+        project_id=requirement_form.project_id.data
+    )
+    requirement = Requirement(**requirement_value)
+    node.requirements.append(requirement)
+    db.session.add(node)
+    db.session.commit()
+
+def save_requirement_in_bd(form):
+    if form.id.data:
+        upgrade_requirement(form)
+    else:
+        create_new_requirement(form)
+
 
 def make_requirements_list(project_id:int) -> list:
     """Преобразуем спосик нод дерева требований в список требований вида:
