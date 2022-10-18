@@ -7,10 +7,12 @@ from rms.projects.models import Project
 
 blueprint = Blueprint('projects', __name__, url_prefix='/projects')
 
-@blueprint.route('/create_project/', methods=['GET'])
+
+@blueprint.route('/create_project_page/', methods=['GET'])
 def create_project():
     project_form = ProjectForm()
     return render_template('projects/create_project.html', form=project_form)
+
 
 @blueprint.route('save', methods=['POST'])
 def save_project():
@@ -20,7 +22,6 @@ def save_project():
         return redirect(url_for('requirements.create_requirement'))
     else:
         return render_template('projects/create_project.html', form=project_form)
-
 
 
 @blueprint.route('/index',methods=['GET'])
