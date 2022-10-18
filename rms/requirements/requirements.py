@@ -13,7 +13,7 @@ def load_requirement(requirement_id):
     return requirement
 
 def get_last_requirement(node_id):
-    requirement = db.session.query(Requirement).filter(Requirement.requirement_node_id == node_id).order_by(
+    requirement = db.session.query(Requirement).filter(Requirement.requirement_id == node_id).order_by(
         Requirement.created_date.desc()).first()
     return requirement
 
@@ -31,8 +31,8 @@ def save_requirement_in_bd(form):
 
     if form.id.data:
         #Обновление
-        requirement_value['version'], requirement_value['requirement_node_id'] = db.session.query(
-            Requirement.version, Requirement.requirement_node_id).filter(Requirement.id == form.id.data).one()
+        requirement_value['version'], requirement_value['requirement_id'] = db.session.query(
+            Requirement.version, Requirement.requirement_id).filter(Requirement.id == form.id.data).one()
         requirement_value['version'] += 1
         # for key, value in requirement_value.items():
         #     setattr(requirement,key,value)
@@ -102,9 +102,12 @@ def get_plain_requirement_text(project_id:int) -> str:
 
     requirement_list.sort(key=itemgetter(0))
 
+    print(requirement_list)
+
     text = ''
     for node in requirement_list:
-        requirement = db.session.query(Requirement).filter(Requirement.requirement_node_id == node[1].id).order_by(Requirement.created_date.desc()).first()
+        print(node[1].id)
+        requirement = db.session.query(Requirement).filter(Requirement.requirement_id == node[1].id).order_by(Requirement.created_date.desc()).first()
         indent = '&nbsp;' * len(str(node[0]).replace('0',''))
         text += f"{indent}{'.'.join(str(node[0]).replace('0',''))} {requirement.name}<br>{indent}{indent}{requirement.description}<br>"
 

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+
 {% block content %}
-<a href="{{url_for('requirements.create_requirement')}}">Создать требование</a>
-<br>
-<a href="{{url_for('projects.create_project')}}">Создать проект</a>
+    <a href="{{url_for('requirements.create_requirement')}}">Создать требование</a>
+    <br>
+    <a href="{{url_for('projects.create_project')}}">Создать проект</a>
 {% endblock %}

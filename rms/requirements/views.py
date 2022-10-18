@@ -20,7 +20,7 @@ def get_requirement(requirement_id):
     requirement = load_requirement(requirement_id)
     accepted = False
     for accept in requirement.accepts:
-        if accept.get_user() == current_user.get_id():
+        if accept.get_user() == current_user.id:
             accepted = True
 
     requirement_json = {

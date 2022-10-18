@@ -22,6 +22,3 @@ class User(db.Model, UserMixin):
     @property
     def is_admin(self):
         return self.role == Roles.admin
-
-    def get_id(self):
-        return self.id

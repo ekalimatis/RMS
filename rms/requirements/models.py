@@ -31,7 +31,7 @@ class Requirement(db.Model):
     status_id = db.Column(db.Integer(), db.ForeignKey('requirement_statuses.id'))
     author_id = db.Column(db.Integer())
     tags = db.Column(db.String())
-    requirement_node_id = db.Column(db.Integer(), db.ForeignKey('requirement_tree.id'))
+    requirement_id = db.Column(db.Integer(), db.ForeignKey('requirement_tree.id'))
     project_id = db.Column(db.Integer(), db.ForeignKey('project.id'))
     test_id = db.Column(db.Integer())
     task_id = db.Column(db.Integer())
