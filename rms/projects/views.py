@@ -9,7 +9,7 @@ blueprint = Blueprint('projects', __name__, url_prefix='/projects')
 
 
 @blueprint.route('/create_project_page/', methods=['GET'])
-def create_project():
+def create_project_page():
     project_form = ProjectForm()
     return render_template('projects/create_project.html', form=project_form)
 
