@@ -40,7 +40,8 @@ function get_requirement(requirement_id) {
     if (requirement_id) {
     fetch('/requirements/get_requirement/' + requirement_id).then(function(response) {
         response.json().then(function(data) {
-            document.getElementById('id').value = data.requirement.id
+            document.getElementById('requirement_id').value = data.requirement.requirement_id
+            document.getElementById('requirement_node_id').value = data.requirement.requirement_node_id
             document.getElementById('name').value = data.requirement.name
             document.getElementById('description').innerHTML = data.requirement.description
             document.getElementById('status').value = data.requirement.status_id
@@ -48,7 +49,7 @@ function get_requirement(requirement_id) {
             document.getElementById('priority').value = data.requirement.priority_id
             document.getElementById('type').value = data.requirement.type_id
 
-            if (data.requirement.accept_but) {
+            if (data.requirement.is_accept) {
                 document.getElementById('Accept').value = 'ОДОБРЕНО'
             } else {
                 document.getElementById('Accept').value = 'Одобрить'
@@ -63,7 +64,7 @@ function get_requirement(requirement_id) {
 }
 
 function new_requirement(){
-    document.getElementById('id').value = null
+    document.getElementById('requirement_id').value = null
     document.getElementById('name').value = null
     document.getElementById('description').innerHTML = ''
     document.getElementById('status').value = null
@@ -75,4 +76,4 @@ function new_requirement(){
 function accept_requirement(){
     requirement_id = requirement_select.value;
     fetch('/requirements/accept/' + requirement_id)
-}
+    }

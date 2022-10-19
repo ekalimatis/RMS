@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash, Response
 from flask_login import current_user
 
 from rms.requirements.forms import RequirementForm
@@ -24,7 +24,8 @@ def get_requirement(requirement_id):
             accepted = True
 
     requirement_json = {
-        'id': requirement.id,
+        'requirement_id': requirement.id,
+        'requirement_node_id': requirement.requirement_id,
         'name': requirement.name,
         'description': requirement.description,
         'status_id': requirement.status_id,
@@ -34,9 +35,9 @@ def get_requirement(requirement_id):
     }
 
     if accepted:
-        requirement_json['accept_but'] = True
+        requirement_json['is_accept'] = True
     else:
-        requirement_json['accept_but'] = False
+        requirement_json['is_accept'] = False
 
     return {'requirement': requirement_json}
 
@@ -76,5 +77,6 @@ def accept(requirement_id):
     if accept_rool == accept_users:
         db.session.query(Requirement).filter(Requirement.id == requirement_id).update({"approve": True})
         db.session.commit()
-
-    return 'status=200'
+    response = Response()
+    response.status_code=200
+    return response

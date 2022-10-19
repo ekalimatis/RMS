@@ -11,8 +11,8 @@ from rms.projects.models import Project
 
 class RequirementForm(FlaskForm):
 
-    id = HiddenField()
     requirement_id = HiddenField()
+    requirement_node_id = HiddenField()
     project_id = HiddenField()
 
     name = StringField('Требование', validators=[DataRequired()],

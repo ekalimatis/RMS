@@ -2,6 +2,7 @@ from datetime import datetime
 from operator import itemgetter
 
 from sqlalchemy import func
+from sqlalchemy_mptt import tree_manager
 
 from rms import db
 from rms.requirements.models import RequirementTree, Requirement
@@ -18,6 +19,9 @@ def get_last_requirement(node_id):
     return requirement
 
 def upgrade_requirement(requirement_form):
+    current_version = db.session.query(func.max(Requirement.version)).filter(
+        Requirement.requirement_id == requirement_form.requirement_node_id.data).one()[0]
+
     requirement_value = {
         'name': requirement_form.name.data,
         'description': requirement_form.description.data,
@@ -26,8 +30,8 @@ def upgrade_requirement(requirement_form):
         'priority_id': requirement_form.priority.data,
         'type_id': requirement_form.type.data,
         'update_date': datetime.utcnow(),
-        'requirement_id': requirement_form.requirement_id.data,
-        'version':  db.session.query(Requirement.version).filter(Requirement.id == requirement_form.id.data).one() + 1,
+        'requirement_id': requirement_form.requirement_node_id.data,
+        'version':  current_version + 1,
     }
     requirement = Requirement(**requirement_value)
     db.session.add(requirement)
@@ -42,21 +46,24 @@ def create_new_requirement(requirement_form):
         'priority_id': requirement_form.priority.data,
         'type_id': requirement_form.type.data,
         'update_date': datetime.utcnow(),
-        'requirement_id': requirement_form.requirement_id.data,
         'created_date': datetime.utcnow(),
         'version': 1,
     }
+    tree_manager.register_events(remove=True)
     node = RequirementTree(
-        parent_id=requirement_form.requirement_id.data,
-        project_id=requirement_form.project_id.data
+        parent_id=requirement_form.requirement_node_id.data,
+        project_id=requirement_form.project_id.data,
+        left=0,
+        right=0
     )
     requirement = Requirement(**requirement_value)
     node.requirements.append(requirement)
     db.session.add(node)
     db.session.commit()
+    tree_manager.register_events()
 
 def save_requirement_in_bd(form):
-    if form.id.data:
+    if form.requirement_id.data:
         upgrade_requirement(form)
     else:
         create_new_requirement(form)
@@ -110,11 +117,8 @@ def get_plain_requirement_text(project_id:int) -> str:
 
     requirement_list.sort(key=itemgetter(0))
 
-    print(requirement_list)
-
     text = ''
     for node in requirement_list:
-        print(node[1].id)
         requirement = db.session.query(Requirement).filter(Requirement.requirement_id == node[1].id).order_by(Requirement.created_date.desc()).first()
         indent = '&nbsp;' * len(str(node[0]).replace('0',''))
         text += f"{indent}{'.'.join(str(node[0]).replace('0',''))} {requirement.name}<br>{indent}{indent}{requirement.description}<br>"
