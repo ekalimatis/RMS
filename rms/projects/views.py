@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, redirect, url_for, request, jsonif
 
 from rms.projects.forms import ProjectForm
 from rms.projects.projects import save_project_in_bd
+from rms.projects.models import Project
+from rms.helpers.form_helpers import flash_form_errors
 from rms.projects.models import Project, RequirementTree
 from rms.requirements.requirements import make_requirements_list
 
@@ -28,3 +30,15 @@ def view_project(project_id: int):
     if not project:
         abort(404)
     return render_template("project_card.html", project=project, req_tree=req_list)
+    if project_form.validate_on_submit():
+        save_project_in_bd(project_form)
+        return redirect(url_for('requirements.create_requirement'))
+    else:
+        flash_form_errors(project_form)
+        return render_template('projects/create_project.html', form=project_form)
+
+
+@blueprint.route('/index', methods=['GET'])
+def list_projects():
+    projects = Project.query.order_by(Project.created_date.desc()).all()
+    return render_template('projects/index.html', project_list=projects)
