@@ -4,6 +4,8 @@ from rms.projects.forms import ProjectForm
 from rms.projects.projects import save_project_in_bd
 from rms.projects.models import Project
 from rms.helpers.form_helpers import flash_form_errors
+from rms.user.decorators import admin_required, login_required
+
 
 blueprint = Blueprint('projects', __name__, url_prefix='/projects')
 
@@ -26,6 +28,7 @@ def save_project():
 
 
 @blueprint.route('/index', methods=['GET'])
+@login_required
 def list_projects():
     projects = Project.query.order_by(Project.created_date.desc()).all()
     return render_template('projects/index.html', project_list=projects)

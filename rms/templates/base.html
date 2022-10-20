@@ -24,6 +24,13 @@
   <div class="top">
      <h1>{{page_text}}</h1>
   </div>
+  <div class="menu">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <a href="{{ url_for('user.logout') }}"><button type="button" class="btn btn-secondary">Выйти</button></a>
+        <a href = "{{ url_for('requirements.create_requirement') }}"><button type="button" class="btn btn-secondary">Тербования</button></a>
+        <a href="{{ url_for('projects.list_projects') }}"><button type="button" class="btn btn-secondary">Проекты</button></a>
+      </div>
+  </div>
     <div class="text-center">
         <div class="row">
             <div class="col-md-3">
