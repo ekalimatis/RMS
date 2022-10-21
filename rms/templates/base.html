@@ -20,12 +20,23 @@
     </div>
     {% endif %}
 {% endwith %}
-<div class="container">
-  <h1>{{page_text}}</h1>
-
-  {% block content %}{% endblock %}
-
-
+<div>
+  <div class="top">
+     <h1>{{page_text}}</h1>
+  </div>
+    <div class="text-center">
+        <div class="row">
+            <div class="col-md-3">
+                {% block tree_form %}{% endblock %}
+            </div>
+            <div class="col-md-6">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="col-md-3" style="text-align: justify">
+                {% block requirement_list %}{% endblock %}
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

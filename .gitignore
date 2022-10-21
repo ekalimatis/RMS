@@ -133,3 +133,9 @@ dmypy.json
 
 #local files
 init_db.bat
+/create_project.py
+/rms/templates/create_requirement_arch.html
+/create_tree.py
+/run.bat
+/select_req.py
+/rms/requirements/views_arch.py
