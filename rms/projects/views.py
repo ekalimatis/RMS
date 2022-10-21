@@ -11,6 +11,7 @@ blueprint = Blueprint('projects', __name__, url_prefix='/projects')
 
 
 @blueprint.route('/create_project_page/', methods=['GET'])
+@login_required
 def create_project_page():
     project_form = ProjectForm()
     return render_template('projects/create_project.html', form=project_form)
@@ -21,7 +22,7 @@ def save_project():
     project_form = ProjectForm()
     if project_form.validate_on_submit():
         save_project_in_bd(project_form)
-        return redirect(url_for('requirements.create_requirement'))
+        return redirect(url_for('projects.list_projects'))
     else:
         flash_form_errors(project_form)
         return render_template('projects/create_project.html', form=project_form)
