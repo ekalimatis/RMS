@@ -77,6 +77,4 @@ def accept(requirement_id):
     if accept_rool == accept_users:
         db.session.query(Requirement).filter(Requirement.id == requirement_id).update({"approve": True})
         db.session.commit()
-    response = Response()
-    response.status_code=200
-    return response
+    return Response(status=200)

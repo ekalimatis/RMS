@@ -10,7 +10,7 @@ from rms.requirements.forms import RequirementForm
 
 
 def load_requirement(requirement_id):
-    requirement = db.session.query(Requirement).filter(Requirement.id == requirement_id).one()
+    requirement = db.session.get(Requirement, requirement_id)
     return requirement
 
 def get_last_requirement(node_id):
