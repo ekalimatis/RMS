@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 
 from rms import db
 from rms.user.models import User
+from rms.user.enums import Roles
 
 
 class RequirementTree(db.Model, BaseNestedSets):
