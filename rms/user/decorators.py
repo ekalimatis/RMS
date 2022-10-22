@@ -18,3 +18,11 @@ def admin_required(func):
             return redirect(url_for('user.index'))
         return func(*args, **kwargs)
     return decorated_view
+
+def login_required(func):
+    @wraps(func)
+    def is_login(*args, **kwargs):
+        if current_user.is_authenticated:
+            return func(*args, **kwargs)
+        return redirect(url_for('user.login'))
+    return is_login
