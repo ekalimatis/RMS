@@ -89,5 +89,13 @@ class AcceptRequirement(db.Model):
     def get_user(self):
         return self.accept_user
 
+class AcceptRequirementRool(db.Model):
+    __tablename__ = 'accept_requirement_rool'
+    id = db.Column(db.Integer, primary_key=True)
+    requirement_type = db.Column(db.Integer(), db.ForeignKey('requirement_types.id'), nullable=False)
+    accept_role = db.Column(db.Enum(Roles), nullable=False)
+    __table_args__ = (
+        UniqueConstraint("requirement_type", "accept_role"),
+    )
 
 
