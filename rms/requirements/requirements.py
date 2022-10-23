@@ -67,7 +67,7 @@ def make_requirements_list_with_parent_id(project_id: int) -> list:
 
     requirement_list = []
     for node in tree_node_dict.values():
-        requirement_chain = str(node.requirements)
+        requirement_chain = node.requirements[0].description
         node_id = node.id
         if node.parent_id:
             parent_id = str(node.parent_id)
