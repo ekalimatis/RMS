@@ -28,7 +28,6 @@ def save_project():
 @blueprint.route('/<int:project_id>', methods=['GET'])
 def view_project(project_id: int):
     project = Project.query.filter(Project.id == project_id).first()
-    #requirement_tree_nodes = RequirementTree.query.filter(RequirementTree.project_id == project_id).all()
     req_list = make_requirements_list(project_id)
     if not project:
         abort(404)
