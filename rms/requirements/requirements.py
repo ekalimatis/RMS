@@ -73,10 +73,10 @@ def make_requirements_list_with_parent_id(project_id: int) -> list:
             parent_id = str(node.parent_id)
         else:
             parent_id = "#"
-        print(parent_id)
         requirement_list.append({'id': str(node_id), 'parent_id': parent_id, 'text': requirement_chain})
 
     return requirement_list
+
 
 def get_plain_requirement_text(project_id:int) -> str:
 
