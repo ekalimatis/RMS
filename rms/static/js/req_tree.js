@@ -1,3 +1,21 @@
+let jstree_div = document.getElementById('jstree_div');
+let url = '/requirements/tree_data/1';
+
+
+
+
+
+
+jstree_div.addEventListener('load', function (){
+    fetch(url).then(function (response){
+        let r = response.json()
+        console.log(r)
+    })
+
+})
+
+
+
 /*
 $('#jstree_demo_div').jstree({ 'core' : {
         'data' : [
@@ -41,8 +59,6 @@ fetch('/requirements/requirement_list/' + 1).then(function(response) {
 
  */
 
-let jstree_div = document.getElementById('jstree_div')
-let url = '/requirements/requirement_list/1';
 /*
 fetch(url)
     .then(res.json())
@@ -52,7 +68,7 @@ fetch(url)
             jstree_div.jstree({'core': { 'data': out.data}})}));
 
  */
-
+/*
 fetch(url).then(
     function (response){
         response.json().then(
@@ -62,6 +78,6 @@ fetch(url).then(
         )
     }
 )
-
+*/
 
 

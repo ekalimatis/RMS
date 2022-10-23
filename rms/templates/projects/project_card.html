@@ -9,13 +9,18 @@
 
   <div id="jstree_div" class="col-8">
     <script type="text/javascript">
-      (function(){
-        document.getElementById('jstree_div').jstree({
-          'core' : {
-            'data' : []
-          }})
-        console.log('kek')
-        });
+      let jstree_div = document.getElementById('jstree_div');
+      let url = '/requirements/tree_data/' + "{{ project.id }}"
+      function xynta(){
+        fetch(url).then(function (response){
+          response.json().then(
+                  function(r){jQuery('#jstree_div').jstree(
+                          {'core':{'data':r.data}}
+                  )}
+          )
+        })
+      }
+      xynta()
     </script>
   </div>
 </div>
