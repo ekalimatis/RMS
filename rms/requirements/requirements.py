@@ -56,6 +56,32 @@ def make_requirements_list(project_id:int) -> list:
 
     return requirement_list
 
+
+def make_requirements_list_with_parent_id(project_id: int) -> list:
+
+    tree_node_list = db.session.query(RequirementTree).filter(RequirementTree.project_id == project_id).all()
+
+    tree_node_dict = {}
+    for node in tree_node_list:
+        tree_node_dict[node.id] = node
+
+    requirement_list = []
+    for node in tree_node_dict.values():
+        requirement_chain = str(node.requirements)
+        node_id = node.id
+        if node.parent_id:
+            parent_id = str(node.parent_id)
+        else:
+            parent_id = "#"
+        print(parent_id)
+        while node.parent_id:
+            node = tree_node_dict[node.parent_id]
+            print(node)
+            requirement_chain = str(node.requirements) + ' -> ' + requirement_chain
+        requirement_list.append({'id': str(node_id), 'parent_id': parent_id, 'text': requirement_chain})
+
+    return requirement_list
+
 def get_plain_requirement_text(project_id:int) -> str:
 
     max_requirement_level = db.session.query(func.max(RequirementTree.level)).filter(

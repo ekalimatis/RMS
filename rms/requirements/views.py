@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
 
 from rms.requirements.forms import RequirementForm
-from rms.requirements.requirements import save_requirement_in_bd, make_requirements_list, get_plain_requirement_text
+from rms.requirements.requirements import save_requirement_in_bd, make_requirements_list, get_plain_requirement_text, make_requirements_list_with_parent_id
 
 
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
@@ -16,6 +16,13 @@ def create_requirement():
 def get_requirements_list(project_id):
     requirement_list = make_requirements_list(project_id)
     return jsonify({'requirements': requirement_list})
+
+
+@blueprint.route('/tree_data/<int:project_id>')
+def get_tree_data(project_id):
+    tree_list = make_requirements_list_with_parent_id(project_id)
+    return jsonify({'data': tree_list})
+
 
 @blueprint.route('/requirement_doc/<project_id>')
 def get_requirement_doc(project_id):

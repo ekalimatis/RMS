@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-4">
+    <h2>{{project.name}}</h2>
+    <p> {{project.id}} </p>
+    <p> {{project.description}} </p>
+  </div>
+
+  <div id="jstree_div" class="col-8">
+    <script type="text/javascript">
+      (function(){
+        document.getElementById('jstree_div').jstree({
+          'core' : {
+            'data' : []
+          }})
+        console.log('kek')
+        });
+    </script>
+  </div>
+</div>
+
+{% endblock %}
