@@ -11,7 +11,7 @@
     <script type="text/javascript">
       let jstree_div = document.getElementById('jstree_div');
       let url = '/requirements/tree_data/' + "{{ project.id }}"
-      function xynta(){
+      function draw_tree(){
         fetch(url).then(function (response){
           response.json().then(
                   function(r){jQuery('#jstree_div').jstree(
@@ -20,7 +20,7 @@
           )
         })
       }
-      xynta()
+      draw_tree()
     </script>
   </div>
 </div>
