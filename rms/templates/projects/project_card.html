@@ -7,21 +7,9 @@
     <p> {{project.description}} </p>
   </div>
 
-  <div id="jstree_div" class="col-8">
-    <script type="text/javascript">
-      let url = '/requirements/tree_data/' + "{{ project.id }}"
-      function draw_tree(){
-        fetch(url).then(function (response){
-          response.json().then(
-                  function(r){jQuery('#jstree_div').jstree(
-                          {'core':{'data':r.data}}
-                  )}
-          )
-        })
-      }
-      draw_tree()
-    </script>
+  <div id="jstree_div" class="col-8" project_id="{{project.id}}">
+
   </div>
 </div>
-
+<script src="{{ url_for('static', filename='/js/req_tree.js') }}"></script>
 {% endblock %}
