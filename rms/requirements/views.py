@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash, Response
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from rms.requirements.forms import RequirementForm
 from rms.requirements.requirements import *
@@ -10,7 +10,7 @@ from rms.user.decorators import admin_required
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
 
 @blueprint.route('/create_requirement/', methods=['GET'])
-@admin_required
+@login_required
 def create_requirement():
     requirement_form = RequirementForm()
     return render_template('create_requirement.html', form=requirement_form)
@@ -77,6 +77,4 @@ def accept(requirement_id):
     if accept_rool == accept_users:
         db.session.query(Requirement).filter(Requirement.id == requirement_id).update({"approve": True})
         db.session.commit()
-    response = Response()
-    response.status_code=200
-    return response
+    return Response(status=200)
