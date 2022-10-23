@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash, Response
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from rms.requirements.forms import RequirementForm
 from rms.requirements.requirements import *
 from rms.requirements.models import AcceptRequirement
-from rms.user.decorators import admin_required, login_required
+from rms.user.decorators import admin_required
 
 
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')

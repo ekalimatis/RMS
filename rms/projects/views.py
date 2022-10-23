@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
+from flask_login import login_required
 
 from rms.projects.forms import ProjectForm
 from rms.projects.projects import save_project_in_bd
 from rms.projects.models import Project
 from rms.helpers.form_helpers import flash_form_errors
-from rms.user.decorators import admin_required, login_required
+from rms.user.decorators import admin_required
 
 
 blueprint = Blueprint('projects', __name__, url_prefix='/projects')
