@@ -74,10 +74,6 @@ def make_requirements_list_with_parent_id(project_id: int) -> list:
         else:
             parent_id = "#"
         print(parent_id)
-        while node.parent_id:
-            node = tree_node_dict[node.parent_id]
-            print(node)
-            requirement_chain = str(node.requirements) + ' -> ' + requirement_chain
         requirement_list.append({'id': str(node_id), 'parent_id': parent_id, 'text': requirement_chain})
 
     return requirement_list

@@ -30,7 +30,6 @@ def view_project(project_id: int):
     project = Project.query.filter(Project.id == project_id).first()
     #requirement_tree_nodes = RequirementTree.query.filter(RequirementTree.project_id == project_id).all()
     req_list = make_requirements_list(project_id)
-    #print(req_list)
     if not project:
         abort(404)
     return render_template("projects/project_card.html", project=project, req_tree=req_list)
