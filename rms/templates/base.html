@@ -22,12 +22,32 @@
     </div>
     {% endif %}
 {% endwith %}
-<div class="container">
-  <h1>{{page_text}}</h1>
-
-  {% block content %}{% endblock %}
-
-
+<div>
+  <div class="top">
+     <h1>{{page_text}}</h1>
+  </div>
+  <div class="menu" style="margin: 10px">
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <a href="{{ url_for('user.logout') }}"><button type="button" class="btn btn-secondary">Выйти</button></a>
+        <a href = "{{ url_for('requirements.create_requirement') }}"><button type="button" class="btn btn-secondary">Созадть требование</button></a>
+        <a href="{{ url_for('user.create') }}"><button type="button" class="btn btn-secondary">Создать пользователя</button></a>
+        <a href="{{ url_for('projects.create_project_page') }}"><button type="button" class="btn btn-secondary">Создать проект</button></a>
+        <a href="{{ url_for('projects.list_projects') }}"><button type="button" class="btn btn-secondary">Проекты</button></a>
+      </div>
+  </div>
+    <div class="text-center">
+        <div class="row">
+            <div class="col-md-3">
+                {% block tree_form %}{% endblock %}
+            </div>
+            <div class="col-md-6">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="col-md-3" style="text-align: justify">
+                {% block requirement_list %}{% endblock %}
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

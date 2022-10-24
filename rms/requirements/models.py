@@ -2,9 +2,11 @@ import datetime
 
 from sqlalchemy_mptt.mixins import BaseNestedSets
 from sqlalchemy.sql import text
+from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from rms import db
+from rms.user.models import User
 
 
 class RequirementTree(db.Model, BaseNestedSets):
@@ -24,7 +26,7 @@ class Requirement(db.Model):
     description = db.Column(db.Text())
     created_date = db.Column(db.DateTime(), nullable=False, server_default=db.text('(now() at time zone \'utc0\')'))
     update_date = db.Column(db.DateTime(), nullable=False, onupdate=datetime.datetime.utcnow())
-    approve = db.Column(db.Boolean())
+    approve = db.Column(db.Boolean(), default=False)
     verify_id = db.Column(db.Integer())
     status_id = db.Column(db.Integer(), db.ForeignKey('requirement_statuses.id'))
     author_id = db.Column(db.Integer())
@@ -35,7 +37,7 @@ class Requirement(db.Model):
     task_id = db.Column(db.Integer())
     priority_id = db.Column(db.Integer(), db.ForeignKey('requirement_priority.id'))
     history_log = db.Column(db.Integer())
-    version = db.Column(db.String(20))
+    version = db.Column(db.Integer())
     type_id = db.Column(db.Integer(), db.ForeignKey('requirement_types.id'))
     release = db.Column(db.String(20))
     priority = relationship('RequirementPriority', backref='requirements')
@@ -68,6 +70,24 @@ class RequirementTypes(db.Model):
 
     def __repr__(self):
         return self.type
+
+class AcceptRequirement(db.Model):
+    __tablename__ = 'accept_requirement'
+    id = db.Column(db.Integer, primary_key=True)
+    requirement_id = db.Column(db.Integer(), db.ForeignKey('requirement.id'), nullable=False)
+    accept_user = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
+    requirement = relationship("Requirement", backref="accepts")
+    user = relationship("User", backref="accept_requirements")
+    __table_args__ = (
+        UniqueConstraint("requirement_id", "accept_user"),
+    )
+
+    def __init__(self, requirement_id, user_id):
+        self.requirement_id = requirement_id
+        self.accept_user = user_id
+
+    def get_user(self):
+        return self.accept_user
 
 
 
