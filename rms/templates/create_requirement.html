@@ -37,6 +37,18 @@
                         {{ form.release.label }}
                         {{ form.release() }}
                 </div>
+                </div>
+                <div class="form-group col-md-4" id="requirement_doc" style="width: 500px;">
+                </div>
+            </div>
+            </div>
+            <div>
+                {{ form.submit }}
+            </div>
+        </form>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='/js/build_requirements_list.js') }}"></script>
             </div>
         </div>
     </div>
@@ -51,20 +63,4 @@
 
 
 <script src="{{ url_for('static', filename='/js/get_requirements_list.js') }}"></script>
-{% endblock %}
-
-{% block tree_form %}
-<select class="form-control" id="project" name="project">
-    <option value="0">Выберите проект</option>
-    <option value="1">Первый проект</option>
-    <option value="2">Проект 2</option>
-    <option value="5">Проект 4</option>
-</select>
-
-<select class="form-control" id="requirement" name="requirement">
-</select>
-{% endblock %}
-
-{% block requirement_list %}
-    <div id="requirement_doc"></div>
 {% endblock %}
