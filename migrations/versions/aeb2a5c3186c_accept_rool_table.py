@@ -7,6 +7,8 @@ Create Date: 2022-10-22 13:03:48.922238
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.dialects import postgresql
+from rms.user.enums import Roles
 
 
 # revision identifiers, used by Alembic.
@@ -21,7 +23,7 @@ def upgrade():
     op.create_table('accept_requirement_rool',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('requirement_type', sa.Integer(), nullable=False),
-    sa.Column('accept_role', sa.Enum('admin', 'user', name='roles'), nullable=False),
+    sa.Column('accept_role', postgresql.ENUM(Roles, name='roles', create_type=False), nullable=False),
     sa.ForeignKeyConstraint(['requirement_type'], ['requirement_types.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('requirement_type', 'accept_role')
