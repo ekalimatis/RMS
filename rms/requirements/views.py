@@ -13,7 +13,9 @@ blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
 
 @blueprint.route('/get_requirement/<requirement_id>')
 def get_requirement(requirement_id):
+    print(requirement_id)
     requirement = get_last_requirement(requirement_id)
+    print(requirement.id)
     accepted = False
     for accept in requirement.accepts:
         if accept.get_user() == current_user.id:

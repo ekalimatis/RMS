@@ -37,5 +37,5 @@ function new_requirement(){
 
 function accept_requirement(){
     requirement_id = document.getElementById('requirement_id').value;
-    fetch('/requirements/accept/' + requirement_id)
+    fetch('/requirements/accept/' + requirement_id);
     }

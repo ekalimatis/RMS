@@ -9,8 +9,8 @@ from rms.requirements.models import RequirementTree, Requirement, AcceptRequirem
 from rms.requirements.forms import RequirementForm
 
 
-def load_requirement(requirement_id:int) -> Requirement:
-    requirement = db.session.get(Requirement, requirement_id)
+def load_requirement(id:int) -> Requirement:
+    requirement = db.session.get(Requirement, id)
     return requirement
 
 def get_last_requirement(node_id):
