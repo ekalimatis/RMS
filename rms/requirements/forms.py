@@ -35,12 +35,6 @@ class RequirementForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(RequirementForm, self).__init__(*args, **kwargs)
-
-        projects = db.session.query(Project).all()
-        project_list = [(0, 'Выберите проект')]
-        for project in projects:
-            project_list.append((project.id, project.name))
-
         self.status.choices = [(item.id, item.status) for item in db.session.query(RequirementStatuses).all()]
         self.priority.choices = [(item.id, item.priority) for item in db.session.query(RequirementPriority).all()]
         self.type.choices = [(item.id, item.type) for item in db.session.query(RequirementTypes).all()]

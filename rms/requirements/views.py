@@ -2,23 +2,29 @@ from flask import Blueprint, render_template, redirect, url_for, request, jsonif
 from flask_login import current_user, login_required
 
 from rms.requirements.forms import RequirementForm
-from rms.requirements.requirements import save_requirement_in_bd, make_requirements_list, get_plain_requirement_text, make_requirements_list_with_parent_id
 from rms.requirements.requirements import *
 from rms.requirements.models import AcceptRequirement
 from rms.user.decorators import admin_required
+from rms.projects.models import Project
+from rms.projects.views import view_project
 
 
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
 
-@blueprint.route('/create_requirement/', methods=['GET'])
-@login_required
-def create_requirement():
-    requirement_form = RequirementForm()
-    return render_template('create_requirement.html', form=requirement_form)
+# @blueprint.route('/create_requirement/', methods=['GET'])
+# @login_required
+# def create_requirement():
+    # requirement_form = RequirementForm()
+    # project_id = 5
+    # project = db.session.get(Project, project_id)
+    # req_list = make_requirements_list(project_id)
+    # if not project:
+    #     abort(404)
+    # return render_template('create_requirement.html', form=requirement_form, project=project, req_tree=req_list)
 
 @blueprint.route('/get_requirement/<requirement_id>')
 def get_requirement(requirement_id):
-    requirement = load_requirement(requirement_id)
+    requirement = get_last_requirement(requirement_id)
     accepted = False
     for accept in requirement.accepts:
         if accept.get_user() == current_user.id:
@@ -62,27 +68,20 @@ def get_requirement_doc(project_id):
 @blueprint.route('save', methods=['POST'])
 def save_requirement():
     requirement_form = RequirementForm()
-    if requirement_form.project_id.data == '0':
-        flash('Выберите проект!')
-    else:
-        save_requirement_in_bd(requirement_form)
-        flash('Требование сохранено!')
-
-    return render_template('create_requirement.html', form=requirement_form)
+    save_requirement_in_bd(requirement_form)
+    flash('Требование сохранено!')
+    return  redirect(url_for('projects.view_project', project_id=requirement_form.project_id.data))
+    # return render_template('create_requirement.html', form=requirement_form)
 
 @blueprint.route('accept/<requirement_id>')
 def accept(requirement_id):
-    accept_rool = set(['user', 'admin']) #нужно где-то хранить правила
-    accept_requirement = AcceptRequirement(requirement_id, current_user.get_id())
-    db.session.add(accept_requirement)
-    db.session.commit()
+    save_accept(requirement_id, current_user.id)
 
-    accepts = db.session.query(AcceptRequirement).filter(AcceptRequirement.requirement_id == requirement_id).all()
-    accept_users = []
-    for accept in accepts:
-        accept_users.append(accept.user.role.value)
-    accept_users = set(accept_users)
-    if accept_rool == accept_users:
+    requirement = load_requirement(requirement_id)
+    accept_rool = get_accept_rool(requirement.type_id)
+    accepts_user = get_accept_users(requirement_id)
+
+    if accept_rool == accepts_user:
         db.session.query(Requirement).filter(Requirement.id == requirement_id).update({"approve": True})
         db.session.commit()
     return Response(status=200)

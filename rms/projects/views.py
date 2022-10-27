@@ -9,6 +9,8 @@ from rms.user.decorators import admin_required
 
 from rms.projects.models import Project, RequirementTree
 from rms.requirements.requirements import make_requirements_list
+from rms.requirements.forms import RequirementForm
+from rms import db
 
 blueprint = Blueprint('projects', __name__, url_prefix='/projects')
 
@@ -32,12 +34,17 @@ def save_project():
 
 @blueprint.route('/<int:project_id>', methods=['GET'])
 def view_project(project_id: int):
-    project = Project.query.filter(Project.id == project_id).first()
+    requirement_form = RequirementForm()
+    project = db.session.get(Project, project_id)
     req_list = make_requirements_list(project_id)
+    requirement_form.project_id.data = project_id
     if not project:
         abort(404)
-    return render_template("projects/project_card.html", project=project, req_tree=req_list)
-
+    return render_template('create_requirement.html',
+                           form=requirement_form,
+                           project_id=project.id,
+                           req_tree=req_list,
+                           page_text=f'ПРОЕКТ({project.id}) - {project.name}: {project.description}')
 
 
 @blueprint.route('/index', methods=['GET'])

@@ -20,6 +20,10 @@ class RequirementTree(db.Model, BaseNestedSets):
     def __repr__(self):
         return f'{self.project_id} - {self.id}'
 
+    def get_last_requirement(self):
+        return db.session.query(Requirement).filter(Requirement.requirement_id == self.id).order_by(
+        Requirement.created_date.desc()).first()
+
 class Requirement(db.Model):
     __tablename__ = 'requirement'
     id = db.Column(db.Integer, primary_key=True)

@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "/projects/project_card.html" %}
 
-{% block content %}
+{% block requirement %}
 <form action="{{ url_for('requirements.save_requirement') }}" method="post">
     {{ form.hidden_tag() }}
     <div class="form-row">
@@ -20,7 +20,7 @@
                 </div>
             </div>
                 <br>
-            <div class="=form-row">
+            <div class="form-row">
                     {{ form.description() }}
             </div>
                 <br>
@@ -44,6 +44,8 @@
             </div>
             <div>
                 {{ form.submit }}
+                <input class="btn btn-primary" id="new" name="new" type="submit" value="Новое" onclick="new_requirement()">
+                <input class="btn btn-success" id="Accept" name="Accept" type="submit" value="Одобрить" onclick="accept_requirement()">
             </div>
         </form>
     </div>
@@ -53,14 +55,7 @@
         </div>
     </div>
     <div>
-        {{ form.submit }}
     </div>
 </form>
-<input class="btn btn-primary" id="new" name="new" type="submit" value="Новое" onclick="new_requirement()">
 
-<input class="btn btn-success" id="Accept" name="Accept" type="submit" value="Одобрить" onclick="accept_requirement()">
-
-
-
-<script src="{{ url_for('static', filename='/js/get_requirements_list.js') }}"></script>
 {% endblock %}
