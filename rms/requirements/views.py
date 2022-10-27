@@ -11,17 +11,6 @@ from rms.projects.views import view_project
 
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
 
-# @blueprint.route('/create_requirement/', methods=['GET'])
-# @login_required
-# def create_requirement():
-    # requirement_form = RequirementForm()
-    # project_id = 5
-    # project = db.session.get(Project, project_id)
-    # req_list = make_requirements_list(project_id)
-    # if not project:
-    #     abort(404)
-    # return render_template('create_requirement.html', form=requirement_form, project=project, req_tree=req_list)
-
 @blueprint.route('/get_requirement/<requirement_id>')
 def get_requirement(requirement_id):
     requirement = get_last_requirement(requirement_id)
@@ -71,7 +60,6 @@ def save_requirement():
     save_requirement_in_bd(requirement_form)
     flash('Требование сохранено!')
     return  redirect(url_for('projects.view_project', project_id=requirement_form.project_id.data))
-    # return render_template('create_requirement.html', form=requirement_form)
 
 @blueprint.route('accept/<requirement_id>')
 def accept(requirement_id):

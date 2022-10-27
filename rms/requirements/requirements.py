@@ -53,6 +53,7 @@ def create_new_requirement(requirement_form):
     node = RequirementTree(
         parent_id=requirement_form.requirement_node_id.data,
         project_id=requirement_form.project_id.data,
+        tree_id=requirement_form.project_id.data,
         left=0,
         right=0
     )
@@ -61,6 +62,7 @@ def create_new_requirement(requirement_form):
     db.session.add(node)
     db.session.commit()
     tree_manager.register_events()
+    RequirementTree.rebuild_tree(db.session, requirement_form.project_id.data)
 
 def save_requirement_in_bd(form:RequirementForm):
     if form.requirement_id.data:

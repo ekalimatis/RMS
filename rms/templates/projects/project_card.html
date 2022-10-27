@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row">
-  <div id="jstree_div" class="col-4" project_id="{{project_id}}"></div>
-  <div id="requirement_form" class="col-8">{% block requirement %}{% endblock %}</div>
+  <div id="jstree_div" class="col-2" project_id="{{project_id}}"></div>
+  <div id="requirement_form" class="col-6">{% block requirement %}{% endblock %}</div>
+  <div class="col-2" style="text-align: justify" id="requirement_doc"></div>
 </div>
 
 <script src="{{ url_for('static', filename='/js/req_tree.js') }}"></script>

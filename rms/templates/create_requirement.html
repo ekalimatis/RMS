@@ -23,39 +23,23 @@
             <div class="form-row">
                     {{ form.description() }}
             </div>
-                <br>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                        {{ form.tags.label }}
-                        {{ form.tags() }}
-                </div>
-                <div class="form-group col-md-4">
-                        {{ form.status.label }}
-                        {{ form.status() }}
-                </div>
-                <div class="form-group col-md-2">
-                        {{ form.release.label }}
-                        {{ form.release() }}
-                </div>
-                </div>
-                <div class="form-group col-md-4" id="requirement_doc" style="width: 500px;">
-                </div>
-            </div>
-            </div>
             <div>
                 {{ form.submit }}
                 <input class="btn btn-primary" id="new" name="new" type="submit" value="Новое" onclick="new_requirement()">
                 <input class="btn btn-success" id="Accept" name="Accept" type="submit" value="Одобрить" onclick="accept_requirement()">
             </div>
-        </form>
-    </div>
-</div>
-<script src="{{ url_for('static', filename='/js/build_requirements_list.js') }}"></script>
-            </div>
         </div>
     </div>
-    <div>
-    </div>
 </form>
-
+<script src="{{ url_for('static', filename='/js/build_requirements_list.js') }}"></script>
+</form>
+<script>
+      fetch('/requirements/requirement_doc/' + document.getElementById('project_id').value).then(function(response) {
+        response.json().then(function(data) {
+            let requirement_doc = document.getElementById('requirement_doc');
+            let doc_HTML = data.requirement_doc != '' ? data.requirement_doc : '';
+            requirement_doc.innerHTML = doc_HTML;
+        });
+    });
+</script>
 {% endblock %}
