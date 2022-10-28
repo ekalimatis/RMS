@@ -39,9 +39,9 @@ def view_project(project_id: int):
     return render_template("projects/project_card.html", project=project, req_tree=req_list)
 
 
-
 @blueprint.route('/index', methods=['GET'])
 @login_required
 def list_projects():
     projects = Project.query.order_by(Project.created_date.desc()).all()
     return render_template('projects/index.html', project_list=projects)
+
