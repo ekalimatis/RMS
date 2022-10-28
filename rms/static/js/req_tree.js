@@ -10,3 +10,10 @@ function draw_tree(){
     })
 }
 draw_tree()
+
+function change_rec() {
+    jQuery('#jstree_div')
+        .on('changed.jstree', function (e, data) {
+                jQuery(get_requirement(data.instance.get_node(data.selected[0]).id));
+        });
+};

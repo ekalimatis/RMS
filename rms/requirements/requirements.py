@@ -154,12 +154,12 @@ def save_accept(requirement_id:int, user_id:int) -> None:
     db.session.add(accept_requirement)
     db.session.commit()
 
-def get_accept_rool(requirement_type:int) -> list:
+def get_accept_rool(requirement_type:int) -> set:
     roles = db.session.query(AcceptRequirementRool.accept_role).filter(AcceptRequirementRool.requirement_type == requirement_type).all()
     roles = set([role[0] for role in roles])
     return roles
 
-def get_accept_users(requirement_id:int) -> list:
+def get_accept_users(requirement_id:int) -> set:
     accepts = db.session.query(AcceptRequirement).filter(AcceptRequirement.requirement_id == requirement_id).all()
     accept_users = set([accept.user.role.value for accept in accepts])
     return accept_users

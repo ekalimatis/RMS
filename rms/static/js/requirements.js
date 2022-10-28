@@ -39,3 +39,13 @@ function accept_requirement(){
     requirement_id = document.getElementById('requirement_id').value;
     fetch('/requirements/accept/' + requirement_id);
     }
+
+function get_requirement_doc(){
+fetch('/requirements/requirement_doc/' + document.getElementById('project_id').value).then(function(response) {
+    response.json().then(function(data) {
+        let requirement_doc = document.getElementById('requirement_doc');
+        let doc_HTML = data.requirement_doc != '' ? data.requirement_doc : '';
+        requirement_doc.innerHTML = doc_HTML;
+    });
+});
+}
