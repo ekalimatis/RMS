@@ -49,7 +49,7 @@ def create_new_requirement(requirement_form):
         'created_date': datetime.utcnow(),
         'version': 1,
     }
-    tree_manager.register_events(remove=True)
+
     node = RequirementTree(
         parent_id=requirement_form.requirement_node_id.data,
         project_id=requirement_form.project_id.data,
