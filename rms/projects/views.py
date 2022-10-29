@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
-from flask_login import login_required
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash, abort
+from flask_login import login_required
 
 from rms.projects.forms import ProjectForm
 from rms.projects.projects import save_project_in_bd
@@ -27,9 +26,9 @@ def save_project():
     if project_form.validate_on_submit():
         save_project_in_bd(project_form)
         return redirect(url_for('projects.list_projects'))
-    else:
-        flash_form_errors(project_form)
-        return render_template('projects/create_project.html', form=project_form)
+
+    flash_form_errors(project_form)
+    return render_template('projects/create_project.html', form=project_form)
 
 
 @blueprint.route('/<int:project_id>', methods=['GET'])

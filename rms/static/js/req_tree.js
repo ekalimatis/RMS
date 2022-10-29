@@ -3,9 +3,10 @@ let url = '/requirements/tree_data/' + jstree_div.getAttribute('project_id')
 function draw_tree(){
     fetch(url).then(function (response){
         response.json().then(
-            function(r){jQuery('#jstree_div').jstree(
-                {'core':{'data':r.data}}
-            )}
+            function(r){
+            jQuery('#jstree_div').jstree({'core':{'data':r.data}});
+            change_rec()
+            }
         )
     })
 }
@@ -17,3 +18,4 @@ function change_rec() {
                 jQuery(get_requirement(data.instance.get_node(data.selected[0]).id));
         });
 };
+
