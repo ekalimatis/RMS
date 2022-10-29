@@ -5,7 +5,9 @@
     <div class="col-8">
         <h2>Список проектов</h2>
         {% for project in project_list %}
-        <h3>{{ project.name }}</h3>
+        <h3>
+            <a href="{{ url_for('projects.view_project',project_id=project.id) }}">{{ project.name }}</a>
+        </h3>
             <p>{{ project.description }}</p>
             <p>{{ project.created_date.strftime('%d.%m.%Y') }}</p>
             <hr/>
