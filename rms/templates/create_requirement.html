@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "/projects/project_card.html" %}
 
-{% block content %}
+{% block requirement %}
 <form action="{{ url_for('requirements.save_requirement') }}" method="post">
     {{ form.hidden_tag() }}
     <div class="form-row">
@@ -20,10 +20,9 @@
                 </div>
             </div>
                 <br>
-            <div class="=form-row">
+            <div class="form-row">
                     {{ form.description() }}
             </div>
-                <br>
             <div class="form-row">
                 <div class="form-group col-md-6">
                         {{ form.tags.label }}
@@ -37,30 +36,13 @@
                         {{ form.release.label }}
                         {{ form.release() }}
                 </div>
-                </div>
-                <div class="form-group col-md-4" id="requirement_doc" style="width: 500px;">
-                </div>
-            </div>
-            </div>
-            <div>
-                {{ form.submit }}
-            </div>
-        </form>
-    </div>
-</div>
-<script src="{{ url_for('static', filename='/js/build_requirements_list.js') }}"></script>
             </div>
         </div>
-    </div>
-    <div>
         {{ form.submit }}
     </div>
 </form>
 <input class="btn btn-primary" id="new" name="new" type="submit" value="Новое" onclick="new_requirement()">
-
 <input class="btn btn-success" id="Accept" name="Accept" type="submit" value="Одобрить" onclick="accept_requirement()">
-
-
-
-<script src="{{ url_for('static', filename='/js/get_requirements_list.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/requirements.js') }}"></script>
+<script>get_requirement_doc()</script>
 {% endblock %}

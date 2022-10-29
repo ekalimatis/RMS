@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 
 from rms import db
 from rms.user.models import User
+from rms.user.enums import Roles
 
 
 class RequirementTree(db.Model, BaseNestedSets):
@@ -18,6 +19,10 @@ class RequirementTree(db.Model, BaseNestedSets):
 
     def __repr__(self):
         return f'{self.project_id} - {self.id}'
+
+    def get_last_requirement(self):
+        return db.session.query(Requirement).filter(Requirement.requirement_id == self.id).order_by(
+        Requirement.created_date.desc()).first()
 
 class Requirement(db.Model):
     __tablename__ = 'requirement'
@@ -89,5 +94,13 @@ class AcceptRequirement(db.Model):
     def get_user(self):
         return self.accept_user
 
+class AcceptRequirementRool(db.Model):
+    __tablename__ = 'accept_requirement_rool'
+    id = db.Column(db.Integer, primary_key=True)
+    requirement_type = db.Column(db.Integer(), db.ForeignKey('requirement_types.id'), nullable=False)
+    accept_role = db.Column(db.Enum(Roles), nullable=False)
+    __table_args__ = (
+        UniqueConstraint("requirement_type", "accept_role"),
+    )
 
 

@@ -5,12 +5,12 @@ from sqlalchemy import func
 from sqlalchemy_mptt import tree_manager
 
 from rms import db
-from rms.requirements.models import RequirementTree, Requirement
+from rms.requirements.models import RequirementTree, Requirement, AcceptRequirementRool, AcceptRequirement
 from rms.requirements.forms import RequirementForm
 
 
-def load_requirement(requirement_id):
-    requirement = db.session.get(Requirement, requirement_id)
+def load_requirement(id:int) -> Requirement:
+    requirement = db.session.get(Requirement, id)
     return requirement
 
 def get_last_requirement(node_id):
@@ -49,10 +49,11 @@ def create_new_requirement(requirement_form):
         'created_date': datetime.utcnow(),
         'version': 1,
     }
-    tree_manager.register_events(remove=True)
+
     node = RequirementTree(
         parent_id=requirement_form.requirement_node_id.data,
         project_id=requirement_form.project_id.data,
+        tree_id=requirement_form.project_id.data,
         left=0,
         right=0
     )
@@ -61,8 +62,9 @@ def create_new_requirement(requirement_form):
     db.session.add(node)
     db.session.commit()
     tree_manager.register_events()
+    RequirementTree.rebuild_tree(db.session, requirement_form.project_id.data)
 
-def save_requirement_in_bd(form):
+def save_requirement_in_bd(form:RequirementForm):
     if form.requirement_id.data:
         upgrade_requirement(form)
     else:
@@ -107,7 +109,7 @@ def make_requirements_list_with_parent_id(project_id: int) -> list:
 
     requirement_list = []
     for node in tree_node_dict.values():
-        requirement_chain = node.requirements[0].description
+        requirement_chain = node.get_last_requirement().name
         node_id = node.id
         if node.parent_id:
             parent_id = str(node.parent_id)
@@ -146,3 +148,18 @@ def get_plain_requirement_text(project_id:int) -> str:
         text += f"{indent}{'.'.join(str(node[0]).replace('0',''))} {requirement.name}<br>{indent}{indent}{requirement.description}<br>"
 
     return  text
+
+def save_accept(requirement_id:int, user_id:int) -> None:
+    accept_requirement = AcceptRequirement(requirement_id, user_id)
+    db.session.add(accept_requirement)
+    db.session.commit()
+
+def get_accept_rool(requirement_type:int) -> set:
+    roles = db.session.query(AcceptRequirementRool.accept_role).filter(AcceptRequirementRool.requirement_type == requirement_type).all()
+    roles = set([role[0] for role in roles])
+    return roles
+
+def get_accept_users(requirement_id:int) -> set:
+    accepts = db.session.query(AcceptRequirement).filter(AcceptRequirement.requirement_id == requirement_id).all()
+    accept_users = set([accept.user.role.value for accept in accepts])
+    return accept_users
