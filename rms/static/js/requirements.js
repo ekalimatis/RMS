@@ -5,7 +5,8 @@ function get_requirement(requirement_id) {
             document.getElementById('requirement_id').value = data.requirement.requirement_id
             document.getElementById('requirement_node_id').value = data.requirement.requirement_node_id
             document.getElementById('name').value = data.requirement.name
-            document.getElementById('description').textContent = data.requirement.description
+            document.getElementById('description').value = data.requirement.description
+            document.getElementsByClassName(' nicEdit-main')[0].innerHTML = data.requirement.description
             document.getElementById('status').value = data.requirement.status_id
             document.getElementById('tags').value = data.requirement.tags
             document.getElementById('priority').value = data.requirement.priority_id
@@ -28,7 +29,7 @@ function get_requirement(requirement_id) {
 function new_requirement(){
     document.getElementById('requirement_id').value = null
     document.getElementById('name').value = null
-    document.getElementById('description').innerHTML = ''
+    document.getElementsByClassName(' nicEdit-main')[0].innerHTML = ''
     document.getElementById('status').value = null
     document.getElementById('tags').value = null
     document.getElementById('priority').value = null
