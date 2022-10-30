@@ -12,11 +12,17 @@ def save_project_in_bd(form):
         name = form.name.data,
         description = form.description.data
     )
+    db.session.add(project)
+    db.session.commit()
+
+    project_id = project.id
 
     root_requirement_tree_node = RequirementTree()
     tree_manager.register_events(remove=True)
     root_requirement_tree_node.left = 0
     root_requirement_tree_node.right = 0
+    root_requirement_tree_node.tree_id = project_id #так не срабатывает
+    root_requirement_tree_node.project_id = project_id
 
     root_requirement = Requirement(
         name = 'Коренвое требование проекта',
@@ -27,8 +33,15 @@ def save_project_in_bd(form):
     )
 
     root_requirement_tree_node.requirements.append(root_requirement)
-    project.requirement_tree_nodes.append(root_requirement_tree_node)
 
-    db.session.add(project)
+    db.session.add(root_requirement_tree_node)
     db.session.commit()
+
+    #Меняем tree_id на нужный
+    node = db.session.query(RequirementTree).filter(RequirementTree.id == root_requirement_tree_node.id).one()
+    node.tree_id = project_id
+    db.session.add(node)
+    db.session.commit()
+
     tree_manager.register_events()
+    RequirementTree.rebuild_tree(db.session, project_id)
