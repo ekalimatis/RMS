@@ -22,7 +22,6 @@ def create_project_page():
 @blueprint.route('save', methods=['POST'])
 def save_project():
     project_form = ProjectForm()
-    save_project_in_bd(project_form)
     if project_form.validate_on_submit():
         save_project_in_bd(project_form)
         return redirect(url_for('projects.list_projects'))
