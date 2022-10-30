@@ -1,17 +1,35 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
 
 from rms.db import db
 from rms.user.models import User
 from rms.user.enums import Roles
-from rms.user.forms import LoginForm, UserCreationForm
+from rms.requirements.models import AcceptRequirement, Requirement
+from rms.user.forms import LoginForm, UserCreationForm, UserChangePasswordForm
 from rms.user.decorators import admin_required
+from rms.helpers.form_helpers import flash_form_errors
 blueprint = Blueprint('user', __name__, url_prefix='/users')
 
 
 @blueprint.route('/index')
 def index():
     return redirect(url_for('projects.list_projects'))
+
+
+@blueprint.route('/profile', methods=['GET'])
+@login_required
+def get_profile():
+    current_user_id = current_user.id
+    #reqs_ids_to_accept = AcceptRequirement.query(AcceptRequirement.requirement_id)\
+    #    .filter(AcceptRequirement.accept_user == current_user_id).all()
+    #reqs_to_accept = Requirement.query.filter(Requirement.id in reqs_ids_to_accept)
+    change_psw_form = UserChangePasswordForm()
+    if change_psw_form.validate_on_submit():
+        current_user.set_password(change_psw_form.password.data)
+    else:
+        flash_form_errors(change_psw_form)
+
+
 
 
 @blueprint.route('/login')
@@ -74,3 +92,5 @@ def process_create():
                     getattr(create_form, field).label.text,error
                 ))
         return redirect(url_for('user.create'))
+
+
