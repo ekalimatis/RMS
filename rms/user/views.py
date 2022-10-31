@@ -31,8 +31,11 @@ def get_profile():
 @login_required
 def process_password_change():
     change_psw_form = UserChangePasswordForm()
+    #user = User.query.filter(User.id == current_user.id).first()
     if change_psw_form.validate_on_submit():
         current_user.set_password(change_psw_form.password.data)
+        db.session.add(current_user)
+        db.session.commit()
         return redirect(url_for('user.get_profile'))
     else:
         flash_form_errors(change_psw_form)
