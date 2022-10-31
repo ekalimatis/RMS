@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <h3>История требования</h3>
+    {% for version in versions %}
+    {{ version.created_date.strftime('%d.%m.%Y') }}
+    <br>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
