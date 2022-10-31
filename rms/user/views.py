@@ -20,18 +20,19 @@ def index():
 @login_required
 def get_profile():
     current_user_id = current_user.id
-    #reqs_ids_to_accept = AcceptRequirement.query(AcceptRequirement.requirement_id)\
-    #    .filter(AcceptRequirement.accept_user == current_user_id).all()
-    #reqs_to_accept = Requirement.query.filter(Requirement.id in reqs_ids_to_accept)
+    reqs_ids_to_accept = AcceptRequirement.query\
+        .with_entities(AcceptRequirement.requirement_id)\
+        .filter(AcceptRequirement.accept_user == current_user_id).all()
+    reqs_ids_to_accept = [req[0] for req in reqs_ids_to_accept]
+    reqs_to_accept = Requirement.query.filter(Requirement.id in reqs_ids_to_accept).all()
     change_psw_form = UserChangePasswordForm()
-    return render_template('user/profile.html', form=change_psw_form)
+    return render_template('user/profile.html', form=change_psw_form, reqs_to_accept=reqs_to_accept)
 
 
 @blueprint.route("/process-password-change", methods=['POST'])
 @login_required
 def process_password_change():
     change_psw_form = UserChangePasswordForm()
-    #user = User.query.filter(User.id == current_user.id).first()
     if change_psw_form.validate_on_submit():
         current_user.set_password(change_psw_form.password.data)
         db.session.add(current_user)
