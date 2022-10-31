@@ -33,9 +33,10 @@ def process_password_change():
     change_psw_form = UserChangePasswordForm()
     if change_psw_form.validate_on_submit():
         current_user.set_password(change_psw_form.password.data)
+        return redirect(url_for('user.get_profile'))
     else:
         flash_form_errors(change_psw_form)
-
+        return redirect(url_for('user.get_profile'))
 
 
 
