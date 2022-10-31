@@ -24,10 +24,18 @@ def get_profile():
     #    .filter(AcceptRequirement.accept_user == current_user_id).all()
     #reqs_to_accept = Requirement.query.filter(Requirement.id in reqs_ids_to_accept)
     change_psw_form = UserChangePasswordForm()
+    return render_template('user/profile.html', form=change_psw_form)
+
+
+@blueprint.route("/process-password-change", methods=['POST'])
+@login_required
+def process_password_change():
+    change_psw_form = UserChangePasswordForm()
     if change_psw_form.validate_on_submit():
         current_user.set_password(change_psw_form.password.data)
     else:
         flash_form_errors(change_psw_form)
+
 
 
 
