@@ -4,7 +4,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from rms.db import db
 from rms.user.models import User
 from rms.user.enums import Roles
-from rms.requirements.models import AcceptRequirement, Requirement
+from rms.requirements.models import AcceptRequirement, AcceptRequirementRool, Requirement
 from rms.user.forms import LoginForm, UserCreationForm, UserChangePasswordForm
 from rms.user.decorators import admin_required
 from rms.helpers.form_helpers import flash_form_errors
@@ -19,12 +19,12 @@ def index():
 @blueprint.route('/profile', methods=['GET'])
 @login_required
 def get_profile():
-    current_user_id = current_user.id
-    reqs_ids_to_accept = AcceptRequirement.query\
-        .with_entities(AcceptRequirement.requirement_id)\
-        .filter(AcceptRequirement.accept_user == current_user_id).all()
-    reqs_ids_to_accept = [req[0] for req in reqs_ids_to_accept]
-    reqs_to_accept = Requirement.query.filter(Requirement.id in reqs_ids_to_accept).all()
+    current_user_role = current_user.role
+    accept_req_filter = AcceptRequirementRool.accept_role == current_user_role
+    req_types_rows_to_accept = AcceptRequirementRool.query.filter(accept_req_filter).all()
+    req_types_to_accept = [req_type.requirement_type for req_type in req_types_rows_to_accept]
+    print(req_types_to_accept)
+    reqs_to_accept = Requirement.query.filter(Requirement.type_id.in_(req_types_to_accept)).all()
     change_psw_form = UserChangePasswordForm()
     return render_template('user/profile.html', form=change_psw_form, reqs_to_accept=reqs_to_accept)
 

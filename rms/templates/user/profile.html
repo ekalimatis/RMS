@@ -21,6 +21,7 @@
         <h3>Список требований для утверждения</h3>
         {% for req in reqs_to_accept %}
         <h4>{{ req.name }}</h4>
+        <p>{{ req.id }}</p>
         <p>{{ req.description }}</p>
         <hr/>
         {% endfor %}
