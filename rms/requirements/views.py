@@ -73,3 +73,14 @@ def accept(requirement_id):
         db.session.query(Requirement).filter(Requirement.id == requirement_id).update({"approve": True})
         db.session.commit()
     return Response(status=200)
+
+@blueprint.route('/<int:requirement_id>')
+def view_requirement(requirement_id:int):
+    requirement = Requirement.query.filter(Requirement.id == requirement_id).first()
+    return render_template('requirements/req_page.html', requirement=requirement)
+
+@blueprint.route('/versions/<int:requirement_id>')
+def view_versions(requirement_id:int):
+    requirement = Requirement.query.filter(Requirement.id == requirement_id).first()
+    versions = Requirement.query.filter(Requirement.requirement_id == requirement.requirement_id).all()
+    return render_template('requirements/version_history.html', versions=versions)
