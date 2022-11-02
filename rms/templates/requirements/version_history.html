@@ -4,10 +4,10 @@
     <div class="col-12">
         <h3>История требования</h3>
         {% for version in versions %}
-          <h4>{{ version.created_date.strftime('%d.%m.%Y') }}</h4>
-            <p>{{ version.name }}</p>
-            <p>{{ version.description }}</p>
-            <hr/>
+            <h4>{{ version.created_date.strftime('%d.%m.%Y') }}</h4>
+                <p>{{ version.name }}</p>
+                <p>{{ version.description }}</p>
+                <hr/>
         {% endfor %}
     </div>
 </div>
