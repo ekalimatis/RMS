@@ -1,12 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash, Response
-from flask_login import current_user, login_required
+from flask import Blueprint, redirect, url_for, jsonify, flash, Response
+from flask_login import current_user
 
 from rms.requirements.forms import RequirementForm
 from rms.requirements.requirements import *
 from rms.requirements.models import AcceptRequirement
-from rms.user.decorators import admin_required
-from rms.projects.models import Project
-from rms.projects.views import view_project
 
 
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
@@ -15,8 +12,8 @@ blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
 def get_requirement(requirement_id):
     requirement = get_last_requirement(requirement_id)
     accepted = False
-    for accept in requirement.accepts:
-        if accept.get_user() == current_user.id:
+    for req_accept in requirement.accepts:
+        if req_accept.get_user() == current_user.id:
             accepted = True
 
     requirement_json = {
@@ -36,12 +33,6 @@ def get_requirement(requirement_id):
         requirement_json['is_accept'] = False
 
     return {'requirement': requirement_json}
-
-@blueprint.route('/requirement_list/<project_id>')
-def get_requirements_list(project_id):
-    requirement_list = make_requirements_list(project_id)
-    return jsonify({'requirements': requirement_list})
-
 
 @blueprint.route('/tree_data/<int:project_id>')
 def get_tree_data(project_id):
@@ -64,12 +55,4 @@ def save_requirement():
 @blueprint.route('accept/<requirement_id>')
 def accept(requirement_id):
     save_accept(requirement_id, current_user.id)
-
-    requirement = load_requirement(requirement_id)
-    accept_rool = get_accept_rool(requirement.type_id)
-    accepts_user = get_accept_users(requirement_id)
-
-    if accept_rool == accepts_user:
-        db.session.query(Requirement).filter(Requirement.id == requirement_id).update({"approve": True})
-        db.session.commit()
     return Response(status=200)

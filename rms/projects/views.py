@@ -1,13 +1,11 @@
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash, abort
+from flask import Blueprint, render_template, redirect, url_for, abort
 from flask_login import login_required
 
 from rms.projects.forms import ProjectForm
 from rms.projects.projects import save_project_in_bd
 from rms.helpers.form_helpers import flash_form_errors
-from rms.user.decorators import admin_required
 
-from rms.projects.models import Project, RequirementTree
-from rms.requirements.requirements import make_requirements_list
+from rms.projects.models import Project
 from rms.requirements.forms import RequirementForm
 from rms import db
 
@@ -34,14 +32,12 @@ def save_project():
 def view_project(project_id: int):
     requirement_form = RequirementForm()
     project = db.session.get(Project, project_id)
-    req_list = make_requirements_list(project_id)
     requirement_form.project_id.data = project_id
     if not project:
         abort(404)
     return render_template('create_requirement.html',
                            form=requirement_form,
                            project_id=project.id,
-                           req_tree=req_list,
                            page_text=f'ПРОЕКТ({project.id}) - {project.name}: {project.description}')
 
 
