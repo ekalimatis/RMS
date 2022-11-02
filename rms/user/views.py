@@ -19,8 +19,7 @@ def index():
 @blueprint.route('/profile', methods=['GET'])
 @login_required
 def get_profile():
-    accept_requirement_filter = AcceptRequirementRool.accept_role == current_user.role
-    requirement_types_rows_to_accept = AcceptRequirementRool.query.filter(accept_requirement_filter).all()
+    requirement_types_rows_to_accept = AcceptRequirementRool.query.filter(AcceptRequirementRool.accept_role == current_user.role).all()
     requirement_types_to_accept = [requirement_type.requirement_type for requirement_type in requirement_types_rows_to_accept]
     requirement_to_accept = Requirement.query.filter(Requirement.type_id.in_(requirement_types_to_accept)).all()
     change_password_form = UserChangePasswordForm()
