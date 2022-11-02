@@ -1,5 +1,5 @@
-from flask import Blueprint, redirect, url_for, jsonify, flash, Response
-from flask_login import current_user
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash, Response
+from flask_login import current_user, login_required
 
 from rms.requirements.forms import RequirementForm
 from rms.requirements.requirements import *
@@ -51,9 +51,20 @@ def save_requirement():
     requirement_form = RequirementForm()
     save_requirement_in_bd(requirement_form)
     flash('Требование сохранено!')
-    return  redirect(url_for('projects.view_project', project_id=requirement_form.project_id.data))
+    return redirect(url_for('projects.view_project', project_id=requirement_form.project_id.data))
 
 @blueprint.route('accept/<requirement_id>')
 def accept(requirement_id):
     save_accept(requirement_id, current_user.id)
     return Response(status=200)
+
+@blueprint.route('/<int:requirement_id>')
+def view_requirement(requirement_id:int):
+    requirement = Requirement.query.filter(Requirement.id == requirement_id).first()
+    return render_template('requirements/req_page.html', requirement=requirement)
+
+@blueprint.route('/versions/<int:requirement_id>')
+def view_versions(requirement_id:int):
+    requirement = Requirement.query.filter(Requirement.id == requirement_id).first()
+    versions = Requirement.query.filter(Requirement.requirement_id == requirement.requirement_id).all()
+    return render_template('requirements/version_history.html', versions=versions)
