@@ -24,7 +24,7 @@ def get_profile():
     requirement_types_to_accept = [requirement_type.requirement_type for requirement_type in requirement_types_rows_to_accept]
     requirement_to_accept = Requirement.query.filter(Requirement.type_id.in_(requirement_types_to_accept)).all()
     change_password_form = UserChangePasswordForm()
-    return render_template('user/profile.html', form=change_password_form, requirement_to_accept=requirement_to_accept, user=current_user)
+    return render_template('user/profile.html', form=change_password_form, requirement_to_accept=requirement_to_accept)
 
 
 @blueprint.route("/process-password-change", methods=['POST'])

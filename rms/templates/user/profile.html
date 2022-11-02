@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h3>Пользователь: {{ user.username }}, Роль: {{ user.role }}</h3>
+<h3>Пользователь: {{ current_user.username }}, Роль: {{ current_user.role }}</h3>
 <div class="row">
     <div class="col-4">
         <h3>Сменить пароль</h3>
