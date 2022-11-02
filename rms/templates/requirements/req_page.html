@@ -4,13 +4,13 @@
     <h3>Карточка требования</h3>
     <div class="col-12">
         <h4>
-            {{ req.name }}
+            {{ requirement.name }}
         </h4>
-        <p>{{ req.description }}</p>
-        <p>{{ req.created_date.strftime('%d.%m.%Y') }}</p>
-        <p>{{ req.update_date.strftime('%d.%m.%Y') }}</p>
+        <p>{{ requirement.description }}</p>
+        <p>{{ requirement.created_date.strftime('%d.%m.%Y') }}</p>
+        <p>{{ requirement.update_date.strftime('%d.%m.%Y') }}</p>
         <hr/>
-        <a href="{{ url_for('requirements.view_versions',req_id=req.id) }}">История требования</a>
+        <a href="{{ url_for('requirements.view_versions',requirement_id=requirement.id) }}">История требования</a>
     </div>
 </div>
 {% endblock %}

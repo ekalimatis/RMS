@@ -74,14 +74,13 @@ def accept(requirement_id):
         db.session.commit()
     return Response(status=200)
 
-@blueprint.route('/<int:req_id>')
-def view_req(req_id:int):
-    req = Requirement.query.filter(Requirement.id == req_id).first()
-    return render_template('requirements/req_page.html', req=req)
+@blueprint.route('/<int:requirement_id>')
+def view_req(requirement_id:int):
+    requirement = Requirement.query.filter(Requirement.id == requirement_id).first()
+    return render_template('requirements/req_page.html', req=requirement)
 
-@blueprint.route('/versions/<int:req_id>')
-def view_versions(req_id:int):
-    req = Requirement.query.filter(Requirement.id == req_id).first()
-    node_id = req.requirement_id
-    versions = Requirement.query.filter(Requirement.requirement_id == node_id).all()
+@blueprint.route('/versions/<int:requirement_id>')
+def view_versions(requirement_id:int):
+    requirement = Requirement.query.filter(Requirement.id == requirement_id).first()
+    versions = Requirement.query.filter(Requirement.requirement_id == requirement.requirement_id).all()
     return render_template('requirements/version_history.html', versions=versions)
