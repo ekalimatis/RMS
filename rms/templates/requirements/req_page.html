@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row">
-    <h3>Карточка требования</h3>
+
     <div class="col-12">
+        <h3>Карточка требования</h3>
         <h4>
             {{ requirement.name }}
         </h4>
-        <p>{{ requirement.description }}</p>
-        <p>{{ requirement.created_date.strftime('%d.%m.%Y') }}</p>
-        <p>{{ requirement.update_date.strftime('%d.%m.%Y') }}</p>
-        <hr/>
-        <a href="{{ url_for('requirements.view_versions',requirement_id=requirement.id) }}">История требования</a>
+            <p>{{ requirement.description }}</p>
+            <p>{{ requirement.created_date.strftime('%d.%m.%Y') }}</p>
+            <p>{{ requirement.update_date.strftime('%d.%m.%Y') }}</p>
+            <hr/>
+            <a href="{{ url_for('requirements.view_versions',requirement_id=requirement.id) }}">История требования</a>
     </div>
 </div>
 {% endblock %}

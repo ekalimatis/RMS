@@ -77,7 +77,7 @@ def accept(requirement_id):
 @blueprint.route('/<int:requirement_id>')
 def view_req(requirement_id:int):
     requirement = Requirement.query.filter(Requirement.id == requirement_id).first()
-    return render_template('requirements/req_page.html', req=requirement)
+    return render_template('requirements/req_page.html', requirement=requirement)
 
 @blueprint.route('/versions/<int:requirement_id>')
 def view_versions(requirement_id:int):
