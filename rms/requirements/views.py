@@ -25,6 +25,7 @@ def get_requirement(requirement_id):
         'tags': requirement.tags,
         'priority_id': requirement.priority_id,
         'type_id': requirement.type_id,
+        'release': requirement.release,
     }
 
     if accepted:

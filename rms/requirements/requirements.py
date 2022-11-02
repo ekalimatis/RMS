@@ -38,7 +38,8 @@ def upgrade_requirement(requirement_form):
         'update_date': datetime.utcnow(),
         'requirement_id': requirement_form.requirement_node_id.data,
         'version':  current_version + 1,
-        'status_id': STATUSES['Change']
+        'status_id': STATUSES['Change'],
+        'release': requirement_form.release.data
     }
     requirement = Requirement(**requirement_value)
     db.session.add(requirement)
@@ -54,7 +55,8 @@ def create_new_requirement(requirement_form):
         'update_date': datetime.utcnow(),
         'created_date': datetime.utcnow(),
         'version': 1,
-        'status_id': STATUSES['New']
+        'status_id': STATUSES['New'],
+        'release': requirement_form.release.data
     }
 
     node = RequirementTree(

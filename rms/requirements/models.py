@@ -44,7 +44,7 @@ class Requirement(db.Model):
     history_log = db.Column(db.Integer())
     version = db.Column(db.Integer())
     type_id = db.Column(db.Integer(), db.ForeignKey('requirement_types.id'))
-    release = db.Column(db.String(20))
+    release = db.Column(db.Boolean(), default=False)
     priority = relationship('RequirementPriority', backref='requirements')
     status = relationship('RequirementStatuses', backref='requirements')
     type = relationship('RequirementTypes', backref='requirements')
