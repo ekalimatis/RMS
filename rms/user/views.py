@@ -1,17 +1,44 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
 
 from rms.db import db
 from rms.user.models import User
 from rms.user.enums import Roles
-from rms.user.forms import LoginForm, UserCreationForm
+from rms.requirements.models import AcceptRequirement, AcceptRequirementRool, Requirement
+from rms.user.forms import LoginForm, UserCreationForm, UserChangePasswordForm
 from rms.user.decorators import admin_required
+from rms.helpers.form_helpers import flash_form_errors
 blueprint = Blueprint('user', __name__, url_prefix='/users')
 
 
 @blueprint.route('/index')
 def index():
     return redirect(url_for('projects.list_projects'))
+
+
+@blueprint.route('/profile', methods=['GET'])
+@login_required
+def get_profile():
+    requirement_types_rows_to_accept = AcceptRequirementRool.query.filter(AcceptRequirementRool.accept_role == current_user.role).all()
+    requirement_types_to_accept = [requirement_type.requirement_type for requirement_type in requirement_types_rows_to_accept]
+    requirement_to_accept = Requirement.query.filter(Requirement.type_id.in_(requirement_types_to_accept)).all()
+    change_password_form = UserChangePasswordForm()
+    return render_template('user/profile.html', form=change_password_form, requirement_to_accept=requirement_to_accept)
+
+
+@blueprint.route("/process-password-change", methods=['POST'])
+@login_required
+def process_password_change():
+    change_password_form = UserChangePasswordForm()
+    if change_password_form.validate_on_submit():
+        current_user.set_password(change_password_form.password.data)
+        db.session.commit()
+        return redirect(url_for('user.get_profile'))
+    else:
+        flash_form_errors(change_password_form)
+        return redirect(url_for('user.get_profile'))
+
+
 
 
 @blueprint.route('/login')
@@ -74,3 +101,5 @@ def process_create():
                     getattr(create_form, field).label.text,error
                 ))
         return redirect(url_for('user.create'))
+
+

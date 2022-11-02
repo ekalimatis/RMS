@@ -59,7 +59,7 @@ def save_requirement():
     requirement_form = RequirementForm()
     save_requirement_in_bd(requirement_form)
     flash('Требование сохранено!')
-    return  redirect(url_for('projects.view_project', project_id=requirement_form.project_id.data))
+    return redirect(url_for('projects.view_project', project_id=requirement_form.project_id.data))
 
 @blueprint.route('accept/<requirement_id>')
 def accept(requirement_id):
