@@ -7,14 +7,8 @@ from sqlalchemy_mptt import tree_manager
 from rms import db
 from rms.requirements.models import RequirementTree, Requirement, AcceptRequirementRool, AcceptRequirement
 from rms.requirements.forms import RequirementForm
+from rms.requirements.enums import Status
 
-STATUSES = {
-    'New': 0,
-    'Change': 1,
-    'Relis': 2,
-    'Accept': 3,
-    'Arhiv': 4,
-}
 
 def load_requirement(id:int) -> Requirement:
     requirement = db.session.get(Requirement, id)
@@ -38,7 +32,7 @@ def upgrade_requirement(requirement_form):
         'update_date': datetime.utcnow(),
         'requirement_id': requirement_form.requirement_node_id.data,
         'version':  current_version + 1,
-        'status_id': STATUSES['Change'],
+        'status_id': Status.Change.value,
         'release': False
     }
     requirement = Requirement(**requirement_value)
@@ -55,7 +49,7 @@ def create_new_requirement(requirement_form):
         'update_date': datetime.utcnow(),
         'created_date': datetime.utcnow(),
         'version': 1,
-        'status_id': STATUSES['New'],
+        'status_id': Status.New.value,
         'release': requirement_form.release.data
     }
 
@@ -137,7 +131,7 @@ def save_accept(requirement_id:int, user_id:int) -> None:
     accept_rool = get_accept_rool(requirement.type_id)
     accepts_user = get_accept_users(requirement_id)
     if accept_rool == accepts_user:
-        change_requirement_status(requirement_id, STATUSES['Accept'])
+        change_requirement_status(requirement_id, Status.Accept.value)
 
 def get_accept_rool(requirement_type:int) -> set:
     roles = db.session.query(AcceptRequirementRool.accept_role).filter(AcceptRequirementRool.requirement_type == requirement_type).all()
@@ -151,29 +145,30 @@ def get_accept_users(requirement_id:int) -> set:
 
 def change_requirement_status(requirement_id, status_id):
     requirement = db.session.get(Requirement, requirement_id)
-    if status_id == STATUSES['Accept']:
-        droped_aproved_requirement(requirement.requirement_id)
+    if status_id == Status.Accept.value:
+        drop_aproved_requirement(requirement.requirement_id)
         requirement.approve = True
 
-    if status_id == STATUSES['Relis']:
-        droped_release(node_id)
+    if status_id == Status.Release.value:
+        drop_release(requirement.requirement_id)
 
     requirement.status_id = status_id
     db.session.commit()
 
-def droped_release(node_id):
+def drop_release(node_id):
     try:
         release_requirement = db.session.query(Requirement).filter(and_(Requirement.requirement_id == node_id, Requirement.approve == True)).one()
         release_requirement.release = False
+        release_requirement.status_id = Status.Change.value
         db.session.commit()
     except exc.NoResultFound:
         pass
 
-def droped_aproved_requirement(node_id):
+def drop_aproved_requirement(node_id):
     try:
         approved_requirement = db.session.query(Requirement).filter(and_(Requirement.requirement_id == node_id, Requirement.approve == True)).one()
         approved_requirement.approve = False
-        approved_requirement.status_id = STATUSES['Arhiv']
+        approved_requirement.status_id = Status.Archive.value
         db.session.commit()
     except exc.NoResultFound:
         pass
