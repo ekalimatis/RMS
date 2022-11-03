@@ -32,7 +32,7 @@ def upgrade_requirement(requirement_form):
         'update_date': datetime.utcnow(),
         'requirement_id': requirement_form.requirement_node_id.data,
         'version':  current_version + 1,
-        'status_id': Status.Change.value,
+        'status_id': Status.change.value,
         'release': False
     }
     requirement = Requirement(**requirement_value)
@@ -49,7 +49,7 @@ def create_new_requirement(requirement_form):
         'update_date': datetime.utcnow(),
         'created_date': datetime.utcnow(),
         'version': 1,
-        'status_id': Status.New.value,
+        'status_id': Status.new.value,
         'release': requirement_form.release.data
     }
 
@@ -131,7 +131,7 @@ def save_accept(requirement_id:int, user_id:int) -> None:
     accept_rool = get_accept_rool(requirement.type_id)
     accepts_user = get_accept_users(requirement_id)
     if accept_rool == accepts_user:
-        change_requirement_status(requirement_id, Status.Accept.value)
+        change_requirement_status(requirement_id, Status.accept.value)
 
 def get_accept_rool(requirement_type:int) -> set:
     roles = db.session.query(AcceptRequirementRool.accept_role).filter(AcceptRequirementRool.requirement_type == requirement_type).all()
@@ -145,11 +145,11 @@ def get_accept_users(requirement_id:int) -> set:
 
 def change_requirement_status(requirement_id, status_id):
     requirement = db.session.get(Requirement, requirement_id)
-    if status_id == Status.Accept.value:
+    if status_id == Status.accept.value:
         drop_aproved_requirement(requirement.requirement_id)
         requirement.approve = True
 
-    if status_id == Status.Release.value:
+    if status_id == Status.release.value:
         drop_release(requirement.requirement_id)
 
     requirement.status_id = status_id
@@ -159,7 +159,7 @@ def drop_release(node_id):
     try:
         release_requirement = db.session.query(Requirement).filter(and_(Requirement.requirement_id == node_id, Requirement.approve == True)).one()
         release_requirement.release = False
-        release_requirement.status_id = Status.Change.value
+        release_requirement.status_id = Status.change.value
         db.session.commit()
     except exc.NoResultFound:
         pass
@@ -168,7 +168,7 @@ def drop_aproved_requirement(node_id):
     try:
         approved_requirement = db.session.query(Requirement).filter(and_(Requirement.requirement_id == node_id, Requirement.approve == True)).one()
         approved_requirement.approve = False
-        approved_requirement.status_id = Status.Archive.value
+        approved_requirement.status_id = Status.archive.value
         db.session.commit()
     except exc.NoResultFound:
         pass

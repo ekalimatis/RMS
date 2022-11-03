@@ -2,11 +2,11 @@ import enum
 
 
 class Status(enum.Enum):
-    New = 0
-    Change = 1
-    Release = 2
-    Accept = 3
-    Archive = 4
+    new = 0
+    change = 1
+    release = 2
+    accept = 3
+    archive = 4
 
     def __str__(self):
         return self.name  # value string
