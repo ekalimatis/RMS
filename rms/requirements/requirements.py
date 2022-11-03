@@ -38,6 +38,7 @@ def upgrade_requirement(requirement_form):
 
     if requirement_form.release.data:
         drop_release(requirement_form.requirement_node_id.data)
+        requirement_value['status_id'] = Status.release.value
 
     requirement = Requirement(**requirement_value)
     db.session.add(requirement)
