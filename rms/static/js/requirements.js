@@ -11,6 +11,11 @@ function get_requirement(requirement_id) {
             document.getElementById('tags').value = data.requirement.tags
             document.getElementById('priority').value = data.requirement.priority_id
             document.getElementById('type').value = data.requirement.type_id
+            if (data.requirement.release){
+                document.getElementById('release').setAttribute('checked', '')
+            } else {
+                document.getElementById('release').removeAttribute('checked')
+            }
 
             if (data.requirement.is_accept) {
                 document.getElementById('Accept').value = 'ОДОБРЕНО'

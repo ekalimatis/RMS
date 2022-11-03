@@ -1,12 +1,9 @@
-from datetime import datetime
-
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateTimeField, TextAreaField, SubmitField, SelectField, RadioField, HiddenField
+from wtforms import StringField, TextAreaField, SubmitField, SelectField, HiddenField, BooleanField
 from wtforms.validators import DataRequired
 
 from rms.db import db
 from rms.requirements.models import RequirementStatuses, RequirementPriority, RequirementTypes
-from rms.projects.models import Project
 
 
 class RequirementForm(FlaskForm):
@@ -27,9 +24,9 @@ class RequirementForm(FlaskForm):
 
     type = SelectField('Тип', render_kw={"class": "form-control"})
 
-    status = SelectField('Статус', render_kw={"class": "form-control"})
+    status = SelectField('Статус', render_kw={"class": "form-control", "disabled":""})
 
-    release = StringField('Релиз', render_kw={"class": "form-control"})
+    release = BooleanField('Релиз', render_kw={"class": "form-control"})
 
     submit = SubmitField('Сохранить', render_kw={"class": "btn btn-primary"})
 

@@ -1,12 +1,13 @@
 from datetime import datetime
 from operator import itemgetter
 
-from sqlalchemy import func
+from sqlalchemy import func, and_, exc
 from sqlalchemy_mptt import tree_manager
 
 from rms import db
 from rms.requirements.models import RequirementTree, Requirement, AcceptRequirementRool, AcceptRequirement
 from rms.requirements.forms import RequirementForm
+from rms.requirements.enums import Status
 
 
 def load_requirement(id:int) -> Requirement:
@@ -25,13 +26,14 @@ def upgrade_requirement(requirement_form):
     requirement_value = {
         'name': requirement_form.name.data,
         'description': requirement_form.description.data,
-        'status_id': requirement_form.status.data,
         'tags': requirement_form.tags.data,
         'priority_id': requirement_form.priority.data,
         'type_id': requirement_form.type.data,
         'update_date': datetime.utcnow(),
         'requirement_id': requirement_form.requirement_node_id.data,
         'version':  current_version + 1,
+        'status_id': Status.change.value,
+        'release': False
     }
     requirement = Requirement(**requirement_value)
     db.session.add(requirement)
@@ -41,13 +43,14 @@ def create_new_requirement(requirement_form):
     requirement_value = {
         'name': requirement_form.name.data,
         'description': requirement_form.description.data,
-        'status_id': requirement_form.status.data,
         'tags': requirement_form.tags.data,
         'priority_id': requirement_form.priority.data,
         'type_id': requirement_form.type.data,
         'update_date': datetime.utcnow(),
         'created_date': datetime.utcnow(),
         'version': 1,
+        'status_id': Status.new.value,
+        'release': requirement_form.release.data
     }
 
     node = RequirementTree(
@@ -69,35 +72,6 @@ def save_requirement_in_bd(form:RequirementForm):
         upgrade_requirement(form)
     else:
         create_new_requirement(form)
-
-
-def make_requirements_list(project_id:int) -> list:
-    """Преобразуем спосик нод дерева требований в список требований вида:
-    Корневое требование 0 -> Требование 1
-    Корневое требование 0 -> Требование 1 -> Требование 2
-    Корневое требование 0 -> Требование 1 -> Требование 3
-    Корневое требование 0 -> Требование 1 -> Требование 3 - > Требование 4"""
-
-    tree_node_list = db.session.query(RequirementTree).filter(RequirementTree.project_id == project_id).all()
-
-    tree_node_dict = {}
-    for node in tree_node_list:
-        tree_node_dict[node.id] = node
-
-    requirement_list = []
-    for node in tree_node_dict.values():
-        requirement = get_last_requirement(node.id)
-        requirement_chain = requirement.name
-        requirement_id = requirement.id
-
-        while node.parent_id:
-            node = tree_node_dict[node.parent_id]
-            requirement = get_last_requirement(node.id)
-            requirement_chain = requirement.name + ' -> ' + requirement_chain
-        requirement_list.append({'id': requirement_id, 'name': requirement_chain})
-
-    return requirement_list
-
 
 def make_requirements_list_with_parent_id(project_id: int) -> list:
 
@@ -153,13 +127,49 @@ def save_accept(requirement_id:int, user_id:int) -> None:
     accept_requirement = AcceptRequirement(requirement_id, user_id)
     db.session.add(accept_requirement)
     db.session.commit()
+    requirement = load_requirement(requirement_id)
+    accept_rool = get_accept_rool(requirement.type_id)
+    accepts_user = get_accept_users(requirement_id)
+    if accept_rool == accepts_user:
+        change_requirement_status(requirement_id, Status.accept.value)
 
 def get_accept_rool(requirement_type:int) -> set:
     roles = db.session.query(AcceptRequirementRool.accept_role).filter(AcceptRequirementRool.requirement_type == requirement_type).all()
-    roles = set([role[0] for role in roles])
+    roles = set([role[0].value for role in roles])
     return roles
 
 def get_accept_users(requirement_id:int) -> set:
     accepts = db.session.query(AcceptRequirement).filter(AcceptRequirement.requirement_id == requirement_id).all()
     accept_users = set([accept.user.role.value for accept in accepts])
     return accept_users
+
+def change_requirement_status(requirement_id, status_id):
+    requirement = db.session.get(Requirement, requirement_id)
+    if status_id == Status.accept.value:
+        drop_aproved_requirement(requirement.requirement_id)
+        requirement.approve = True
+
+    if status_id == Status.release.value:
+        drop_release(requirement.requirement_id)
+
+    requirement.status_id = status_id
+    db.session.commit()
+
+def drop_release(node_id):
+    try:
+        release_requirement = db.session.query(Requirement).filter(and_(Requirement.requirement_id == node_id, Requirement.approve == True)).one()
+        release_requirement.release = False
+        release_requirement.status_id = Status.change.value
+        db.session.commit()
+    except exc.NoResultFound:
+        pass
+
+def drop_aproved_requirement(node_id):
+    try:
+        approved_requirement = db.session.query(Requirement).filter(and_(Requirement.requirement_id == node_id, Requirement.approve == True)).one()
+        approved_requirement.approve = False
+        approved_requirement.status_id = Status.archive.value
+        db.session.commit()
+    except exc.NoResultFound:
+        pass
+
