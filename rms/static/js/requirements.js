@@ -17,10 +17,15 @@ function get_requirement(requirement_id) {
                 document.getElementById('release').removeAttribute('checked')
             }
 
-            if (data.requirement.is_accept) {
-                document.getElementById('Accept').value = 'ОДОБРЕНО'
+            if (data.requirement.release) {
+                document.getElementById('Accept').setAttribute('style' , 'display: inline;')
+                if (data.requirement.is_accept) {
+                    document.getElementById('Accept').value = 'ОДОБРЕНО'
+                } else {
+                    document.getElementById('Accept').value = 'Одобрить'
+                }
             } else {
-                document.getElementById('Accept').value = 'Одобрить'
+                document.getElementById('Accept').setAttribute('style' , 'display:none')
             }
 
         });

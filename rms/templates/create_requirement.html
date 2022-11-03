@@ -41,7 +41,6 @@
         {{ form.submit }}
     </div>
 </form>
-<input class="btn btn-primary" id="new" name="new" type="submit" value="Новое" onclick="new_requirement()">
 <input class="btn btn-success" id="Accept" name="Accept" type="submit" value="Одобрить" onclick="accept_requirement()">
 <script src="{{ url_for('static', filename='/js/requirements.js') }}"></script>
 <script>get_requirement_doc()</script>

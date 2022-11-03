@@ -2,7 +2,7 @@ import enum
 
 
 class Status(enum.Enum):
-    New = 0
+    new = 0
     Change = 1
     Release = 2
     Accept = 3
