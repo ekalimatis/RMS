@@ -1,0 +1,8 @@
+
+<h3>История требования</h3>
+{% for version in versions %}
+    <h4>{{ version['name'] }}</h4>
+    <p>{{ version['created_date'].strftime('%d.%m.%Y') }}</p>
+    <p>{{ version['description'] }}</p>
+    <hr/>
+{% endfor %}

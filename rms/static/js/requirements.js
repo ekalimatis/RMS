@@ -29,7 +29,7 @@ function get_requirement(requirement_id) {
             } else {
                 document.getElementById('Accept').setAttribute('style' , 'display:none')
             }
-
+            get_requirement_history(data.requirement.requirement_node_id)
         });
     });
     }
@@ -61,4 +61,15 @@ fetch('/requirements/requirement_doc/' + document.getElementById('project_id').v
         requirement_doc.innerHTML = doc_HTML;
     });
 });
+}
+
+function get_requirement_history(node_id){
+
+fetch('/requirements/history/' + node_id).then(function(response) {
+    response.text().then(function(data) {
+        let requirement_doc = document.getElementById('requirement_doc');
+        let doc_HTML = data != '' ? data : '';
+        requirement_doc.innerHTML = doc_HTML;
+        });
+    });
 }

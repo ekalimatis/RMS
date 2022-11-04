@@ -68,3 +68,15 @@ def view_versions(requirement_id:int):
     requirement = Requirement.query.filter(Requirement.id == requirement_id).first()
     versions = Requirement.query.filter(Requirement.requirement_id == requirement.requirement_id).all()
     return render_template('requirements/version_history.html', versions=versions)
+
+@blueprint.route('/history/<int:requirement_node_id>')
+def get_history(requirement_node_id:int):
+    versions = Requirement.query.filter(Requirement.requirement_id == requirement_node_id).order_by(Requirement.created_date.desc()).all()
+    history_log = []
+    for req in versions:
+        history_log.append({
+            'name': req.name,
+            'date': req.created_date.strftime('%d.%m.%Y'),
+            'description':req.description,
+        })
+    return render_template('requirements/history.html', versions=versions)
