@@ -26,7 +26,7 @@ class RequirementForm(FlaskForm):
 
     status = SelectField('Статус', render_kw={"class": "form-control", "disabled":""})
 
-    release = BooleanField('Релиз', render_kw={"class": "form-control"})
+    release = BooleanField('Релиз')
 
     submit = SubmitField('Сохранить', render_kw={"class": "btn btn-primary"})
 

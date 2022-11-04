@@ -6,7 +6,7 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-5">
                         {{ form.name.label }}
                         {{ form.name() }}
                 </div>
@@ -42,7 +42,7 @@
         {{ form.submit }}
     </div>
 </form>
-<input class="btn btn-success" id="Accept" name="Accept" type="submit" value="Одобрить" onclick="accept_requirement()">
+<input class="btn btn-success" id="Accept" name="Accept" type="submit" value="Одобрить">
 <script src="{{ url_for('static', filename='/js/requirements.js') }}"></script>
 <script>get_requirement_doc()</script>
 {% endblock %}

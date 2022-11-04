@@ -1,3 +1,5 @@
+document.getElementById('Accept').addEventListener("click", accept_requirement);
+
 function get_requirement(requirement_id) {
     if (requirement_id) {
     fetch('/requirements/get_requirement/' + requirement_id).then(function(response) {

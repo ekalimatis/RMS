@@ -14,3 +14,8 @@ input.btn {
 #requirement_doc {
     text-align: justify;
 }
+
+.form-group {
+float:left;
+margin:5px;
+}
