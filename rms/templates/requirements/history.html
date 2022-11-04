@@ -1,7 +1,7 @@
 
 <h3>История требования</h3>
 {% for version in versions %}
-    {% if version['approve'] == True %}
+    {% if version['status_id'] == 3 %}
 weweew
         <b>
     {% endif %}
@@ -11,7 +11,7 @@ weweew
     {% endif %}
     <p>{{ version['created_date'].strftime('%d.%m.%Y') }}</p>
     <p>{{ version['description'] }}</p>
-    {% if version['approve'] %}
+    {% if version['status_id'] == 3 %}
         </b>
     {% endif %}
     <hr/>

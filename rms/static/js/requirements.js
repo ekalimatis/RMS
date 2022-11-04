@@ -39,9 +39,9 @@ function fill_requirement(data) {
     document.getElementById('priority').value = data.requirement.priority_id
     document.getElementById('type').value = data.requirement.type_id
     if (data.requirement.release){
-        document.getElementById('release').setAttribute('checked', '')
+        document.getElementById('release').checked=true
     } else {
-        document.getElementById('release').removeAttribute('checked')
+        document.getElementById('release').checked=false
     }
 
     if (data.requirement.release) {
@@ -70,6 +70,7 @@ function new_requirement(){
 function accept_requirement(){
     requirement_id = document.getElementById('requirement_id').value;
     fetch('/requirements/accept/' + requirement_id);
+    get_requirement(requirement_id)
     }
 
 function get_requirement_doc(){

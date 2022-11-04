@@ -66,6 +66,7 @@ def upgrade_requirement(requirement_form):
     requirement = Requirement(**requirement_value)
     db.session.add(requirement)
     db.session.commit()
+    return requirement.id
 
 def create_new_requirement(requirement_form):
     requirement_value = {
@@ -94,12 +95,14 @@ def create_new_requirement(requirement_form):
     db.session.commit()
     tree_manager.register_events()
     RequirementTree.rebuild_tree(db.session, requirement_form.project_id.data)
+    return requirement.id
 
 def save_requirement_in_bd(form:RequirementForm):
     if form.requirement_id.data:
-        upgrade_requirement(form)
+        id = upgrade_requirement(form)
     else:
-        create_new_requirement(form)
+        id = create_new_requirement(form)
+    return id
 
 def make_requirements_list_with_parent_id(project_id: int) -> list:
 
@@ -185,11 +188,12 @@ def change_requirement_status(requirement_id, status_id):
 
 def drop_release(node_id):
     try:
-        release_requirement = db.session.query(Requirement).filter(and_(Requirement.requirement_id == node_id, Requirement.approve == True)).one()
+        release_requirement = db.session.query(Requirement).filter(and_(Requirement.requirement_id == node_id, Requirement.release == True)).one()
         release_requirement.release = False
         release_requirement.status_id = Status.change.value
         db.session.commit()
     except exc.NoResultFound:
+        print('!!!!')
         pass
 
 def drop_aproved_requirement(node_id):
