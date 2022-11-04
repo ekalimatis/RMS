@@ -33,8 +33,13 @@ def upgrade_requirement(requirement_form):
         'requirement_id': requirement_form.requirement_node_id.data,
         'version':  current_version + 1,
         'status_id': Status.change.value,
-        'release': False
+        'release': requirement_form.release.data
     }
+
+    if requirement_form.release.data:
+        drop_release(requirement_form.requirement_node_id.data)
+        requirement_value['status_id'] = Status.release.value
+
     requirement = Requirement(**requirement_value)
     db.session.add(requirement)
     db.session.commit()

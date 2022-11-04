@@ -1,0 +1,21 @@
+input.btn {
+    margin-top:10px;
+}
+
+.menu {
+    margin: 10px
+}
+
+.wrapper {
+    margin:10px;
+    padding:15px
+}
+
+#requirement_doc {
+    text-align: justify;
+}
+
+.form-group {
+float:left;
+margin:5px;
+}
