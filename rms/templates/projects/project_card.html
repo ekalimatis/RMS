@@ -3,12 +3,11 @@
 <div class="row">
   <div>
       <div id="jstree_div" class="col-2" project_id="{{project_id}}"></div>
-      <input class="btn btn-primary" id="new" name="new" type="submit" value="Новое" onclick="new_requirement()"
-      style="margin-top:10px">
+      <input class="btn btn-primary" id="new" name="new" type="submit" value="Новое">
   </div>
 
   <div id="requirement_form" class="col-6">{% block requirement %}{% endblock %}</div>
-  <div class="col-2" style="text-align: justify" id="requirement_doc"></div>
+  <div class="col-2" id="requirement_doc"></div>
 </div>
 
 <script src="{{ url_for('static', filename='/js/req_tree.js') }}"></script>

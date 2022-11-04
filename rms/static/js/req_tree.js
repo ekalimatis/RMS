@@ -1,5 +1,6 @@
 let jstree_div = document.getElementById('jstree_div');
 let url = '/requirements/tree_data/' + jstree_div.getAttribute('project_id')
+document.getElementById('new').addEventListener("click", new_requirement);
 function draw_tree(){
     fetch(url).then(function (response){
         response.json().then(
@@ -18,4 +19,3 @@ function change_rec() {
                 jQuery(get_requirement(data.instance.get_node(data.selected[0]).id));
         });
 };
-
