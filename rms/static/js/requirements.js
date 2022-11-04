@@ -1,34 +1,10 @@
 document.getElementById('Accept').addEventListener("click", accept_requirement);
 
-function get_requirement(requirement_id) {
+function get_last_requirement(node_id) {
     if (requirement_id) {
-    fetch('/requirements/get_requirement/' + requirement_id).then(function(response) {
+    fetch('/requirements/get_last_requirement/' + node_id).then(function(response) {
         response.json().then(function(data) {
-            document.getElementById('requirement_id').value = data.requirement.requirement_id
-            document.getElementById('requirement_node_id').value = data.requirement.requirement_node_id
-            document.getElementById('name').value = data.requirement.name
-            document.getElementById('description').value = data.requirement.description
-            document.getElementsByClassName(' nicEdit-main')[0].innerHTML = data.requirement.description
-            document.getElementById('status').value = data.requirement.status_id
-            document.getElementById('tags').value = data.requirement.tags
-            document.getElementById('priority').value = data.requirement.priority_id
-            document.getElementById('type').value = data.requirement.type_id
-            if (data.requirement.release){
-                document.getElementById('release').setAttribute('checked', '')
-            } else {
-                document.getElementById('release').removeAttribute('checked')
-            }
-
-            if (data.requirement.release) {
-                document.getElementById('Accept').setAttribute('style' , 'display: inline;')
-                if (data.requirement.is_accept) {
-                    document.getElementById('Accept').value = 'ОДОБРЕНО'
-                } else {
-                    document.getElementById('Accept').value = 'Одобрить'
-                }
-            } else {
-                document.getElementById('Accept').setAttribute('style' , 'display:none')
-            }
+            fill_requirement(data)
             get_requirement_history(data.requirement.requirement_node_id)
         });
     });
@@ -37,6 +13,49 @@ function get_requirement(requirement_id) {
         new_requirement()
     }
 }
+
+function get_requirement(requirement_id) {
+    if (requirement_id) {
+    fetch('/requirements/get_requirement/' + requirement_id).then(function(response) {
+        response.json().then(function(data) {
+            fill_requirement(data)
+            get_requirement_history(data.requirement.requirement_node_id)
+        });
+    });
+    }
+    else {
+        new_requirement()
+    }
+}
+
+function fill_requirement(data) {
+    document.getElementById('requirement_id').value = data.requirement.requirement_id
+    document.getElementById('requirement_node_id').value = data.requirement.requirement_node_id
+    document.getElementById('name').value = data.requirement.name
+    document.getElementById('description').value = data.requirement.description
+    document.getElementsByClassName(' nicEdit-main')[0].innerHTML = data.requirement.description
+    document.getElementById('status').value = data.requirement.status_id
+    document.getElementById('tags').value = data.requirement.tags
+    document.getElementById('priority').value = data.requirement.priority_id
+    document.getElementById('type').value = data.requirement.type_id
+    if (data.requirement.release){
+        document.getElementById('release').setAttribute('checked', '')
+    } else {
+        document.getElementById('release').removeAttribute('checked')
+    }
+
+    if (data.requirement.release) {
+        document.getElementById('Accept').setAttribute('style' , 'display: inline;')
+        if (data.requirement.is_accept) {
+            document.getElementById('Accept').value = 'ОДОБРЕНО'
+        } else {
+            document.getElementById('Accept').value = 'Одобрить'
+        }
+    } else {
+        document.getElementById('Accept').setAttribute('style' , 'display:none')
+    }
+}
+
 
 function new_requirement(){
     document.getElementById('requirement_id').value = null

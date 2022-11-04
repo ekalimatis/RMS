@@ -18,6 +18,6 @@ draw_tree()
 function change_rec() {
     jQuery('#jstree_div')
         .on('changed.jstree', function (e, data) {
-                jQuery(get_requirement(data.instance.get_node(data.selected[0]).id));
+                jQuery(get_last_requirement(data.instance.get_node(data.selected[0]).id));
         });
 };

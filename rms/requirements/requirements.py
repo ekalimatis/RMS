@@ -3,21 +3,44 @@ from operator import itemgetter
 
 from sqlalchemy import func, and_, exc
 from sqlalchemy_mptt import tree_manager
+from flask_login import current_user
 
 from rms import db
 from rms.requirements.models import RequirementTree, Requirement, AcceptRequirementRool, AcceptRequirement
 from rms.requirements.forms import RequirementForm
 from rms.requirements.enums import Status
 
-
 def load_requirement(id:int) -> Requirement:
     requirement = db.session.get(Requirement, id)
     return requirement
 
-def get_last_requirement(node_id):
+def load_last_requirement(node_id):
     requirement = db.session.query(Requirement).filter(Requirement.requirement_id == node_id).order_by(
         Requirement.created_date.desc()).first()
     return requirement
+
+def make_json_requirement(requirement:Requirement):
+    accepted = False
+    requirement_json = {
+        'requirement_id': requirement.id,
+        'requirement_node_id': requirement.requirement_id,
+        'name': requirement.name,
+        'description': requirement.description,
+        'status_id': requirement.status_id,
+        'status': Status(requirement.status_id).name,
+        'tags': requirement.tags,
+        'priority_id': requirement.priority_id,
+        'type_id': requirement.type_id,
+        'release': requirement.release,
+        'created_date': requirement.created_date,
+    }
+    for req_accept in requirement.accepts:
+        if req_accept.get_user() == current_user.id:
+            requirement_json['is_accept'] = True
+        else:
+            requirement_json['is_accept'] = False
+
+    return requirement_json
 
 def upgrade_requirement(requirement_form):
     current_version = db.session.query(func.max(Requirement.version)).filter(

@@ -8,32 +8,15 @@ from rms.requirements.models import AcceptRequirement
 
 blueprint = Blueprint('requirements', __name__, url_prefix='/requirements')
 
+@blueprint.route('/get_last_requirement/<node_id>')
+def get_last_requirement(node_id):
+    requirement = load_last_requirement(node_id)
+    return {'requirement': make_json_requirement(requirement)}
+
 @blueprint.route('/get_requirement/<requirement_id>')
 def get_requirement(requirement_id):
-    requirement = get_last_requirement(requirement_id)
-    accepted = False
-    for req_accept in requirement.accepts:
-        if req_accept.get_user() == current_user.id:
-            accepted = True
-
-    requirement_json = {
-        'requirement_id': requirement.id,
-        'requirement_node_id': requirement.requirement_id,
-        'name': requirement.name,
-        'description': requirement.description,
-        'status_id': requirement.status_id,
-        'tags': requirement.tags,
-        'priority_id': requirement.priority_id,
-        'type_id': requirement.type_id,
-        'release': requirement.release,
-    }
-
-    if accepted:
-        requirement_json['is_accept'] = True
-    else:
-        requirement_json['is_accept'] = False
-
-    return {'requirement': requirement_json}
+    requirement = load_requirement(requirement_id)
+    return {'requirement': make_json_requirement(requirement)}
 
 @blueprint.route('/tree_data/<int:project_id>')
 def get_tree_data(project_id):
@@ -73,10 +56,6 @@ def view_versions(requirement_id:int):
 def get_history(requirement_node_id:int):
     versions = Requirement.query.filter(Requirement.requirement_id == requirement_node_id).order_by(Requirement.created_date.desc()).all()
     history_log = []
-    for req in versions:
-        history_log.append({
-            'name': req.name,
-            'date': req.created_date.strftime('%d.%m.%Y'),
-            'description':req.description,
-        })
-    return render_template('requirements/history.html', versions=versions)
+    for requirement in versions:
+        history_log.append(make_json_requirement(requirement))
+    return render_template('requirements/history.html', versions=history_log)
