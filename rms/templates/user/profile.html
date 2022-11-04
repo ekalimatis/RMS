@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 <h3>Пользователь: {{ current_user.username }}, Роль: {{ current_user.role }}</h3>
-<div class="row">
-    <div class="col-4">
+<div class="row text-right">
+    <div class="col-4 text-left">
         <h3>Сменить пароль</h3>
         <form action="{{ url_for('user.process_password_change') }}" method="POST">
             {{ form.hidden_tag() }}
@@ -14,10 +14,11 @@
                 {{ form.password1.label }}<br>
                 {{ form.password1() }}
             </div>
+            <br>
             {{ form.submit }}
         </form>
     </div>
-    <div class="col-8">
+    <div class="col-8 text-right">
         <h3>Список требований для утверждения</h3>
         {% for requirement in requirement_to_accept %}
             <h4>{{ requirement.name }}</h4>
