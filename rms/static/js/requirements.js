@@ -1,4 +1,5 @@
 document.getElementById('Accept').addEventListener("click", accept_requirement);
+document.getElementById('Save').addEventListener("click", save_requirement);
 
 function get_last_requirement(node_id) {
     if (requirement_id) {
@@ -69,27 +70,42 @@ function new_requirement(){
 
 function accept_requirement(){
     requirement_id = document.getElementById('requirement_id').value;
-    fetch('/requirements/accept/' + requirement_id);
-    get_requirement(requirement_id)
-    }
-
-function get_requirement_doc(){
-fetch('/requirements/requirement_doc/' + document.getElementById('project_id').value).then(function(response) {
-    response.json().then(function(data) {
-        let requirement_doc = document.getElementById('requirement_doc');
-        let doc_HTML = data.requirement_doc != '' ? data.requirement_doc : '';
-        requirement_doc.innerHTML = doc_HTML;
-    });
-});
+    fetch('/requirements/accept/' + requirement_id).then(function(){
+        get_requirement(requirement_id).then(function() {
+            get_requirement_history(data.requirement.requirement_node_id)
+        })
+    })
 }
 
-function get_requirement_history(node_id){
-
-fetch('/requirements/history/' + node_id).then(function(response) {
-    response.text().then(function(data) {
-        let requirement_doc = document.getElementById('requirement_doc');
-        let doc_HTML = data != '' ? data : '';
-        requirement_doc.innerHTML = doc_HTML;
+function get_requirement_doc(){
+    fetch('/requirements/requirement_doc/' + document.getElementById('project_id').value).then(function(response) {
+        response.json().then(function(data) {
+            let requirement_doc = document.getElementById('requirement_doc');
+            let doc_HTML = data.requirement_doc != '' ? data.requirement_doc : '';
+            requirement_doc.innerHTML = doc_HTML;
         });
     });
 }
+
+function get_requirement_history(node_id){
+    fetch('/requirements/history/' + node_id).then(function(response) {
+        response.text().then(function(data) {
+            let requirement_doc = document.getElementById('requirement_doc');
+            let doc_HTML = data != '' ? data : '';
+            requirement_doc.innerHTML = doc_HTML;
+            });
+        });
+}
+
+function save_requirement() {
+    document.getElementById('description').value = document.getElementsByClassName(' nicEdit-main')[0].innerHTML
+    let form = document.querySelector('form');
+    let param = new FormData(form);
+    fetch('/requirements/save/', {method: 'POST', body: param}).then(function(response) {
+        response.json().then(function(data) {
+            get_requirement(data.id);
+            draw_tree()
+        })
+    })
+}
+

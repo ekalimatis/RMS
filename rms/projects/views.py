@@ -38,7 +38,7 @@ def view_project(project_id: int):
     return render_template('create_requirement.html',
                            form=requirement_form,
                            project_id=project.id,
-                           page_text=f'ПРОЕКТ({project.id}) - {project.name}: {project.description}')
+                           page_text=f'{project.name}')
 
 
 @blueprint.route('/index', methods=['GET'])

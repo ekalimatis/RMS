@@ -1,7 +1,7 @@
 {% extends "/projects/project_card.html" %}
 
 {% block requirement %}
-<form action="{{ url_for('requirements.save_requirement') }}" method="post">
+<form>
     {{ form.hidden_tag() }}
     <div class="form-row">
         <div class="form-group col-md-12">
@@ -39,9 +39,9 @@
             </div>
             <br>
         </div>
-        {{ form.submit }}
     </div>
 </form>
+<input class="btn btn-primary" id="Save" name="Save" type="submit" value="Сохранить">
 <input class="btn btn-success" id="Accept" name="Accept" type="submit" value="Одобрить">
 <script src="{{ url_for('static', filename='/js/requirements.js') }}"></script>
 {% endblock %}

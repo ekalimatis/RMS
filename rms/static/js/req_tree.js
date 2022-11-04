@@ -8,12 +8,12 @@ function draw_tree(){
         response.json().then(
             function(r){
             jQuery('#jstree_div').jstree({'core':{'data':r.data}});
-            change_rec()
+            change_rec();
             }
         )
     })
 }
-draw_tree()
+
 
 function change_rec() {
     jQuery('#jstree_div')
@@ -21,3 +21,4 @@ function change_rec() {
                 jQuery(get_last_requirement(data.instance.get_node(data.selected[0]).id));
         });
 };
+draw_tree()

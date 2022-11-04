@@ -2,14 +2,13 @@
 <h3>История требования</h3>
 {% for version in versions %}
     {% if version['status_id'] == 3 %}
-weweew
         <b>
     {% endif %}
-    <h4><a class="req_title" onclick="get_requirement({{version['requirement_id']}})">{{ version['name'] }}</a> ({{version['status']}})</h4>
+        <b><a class="req_title" onclick="get_requirement({{version['requirement_id']}})">{{ version['name'] }} ({{version['status']}})</a></b>
     {% if version['release'] == True %}
         <p>RELEASE</p>
     {% endif %}
-    <p>{{ version['created_date'].strftime('%d.%m.%Y') }}</p>
+    <p>{{ version['created_date'].strftime('%d.%m.%Y %H:%M') }}</p>
     <p>{{ version['description'] }}</p>
     {% if version['status_id'] == 3 %}
         </b>

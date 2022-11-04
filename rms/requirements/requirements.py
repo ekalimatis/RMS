@@ -45,7 +45,6 @@ def make_json_requirement(requirement:Requirement):
 def upgrade_requirement(requirement_form):
     current_version = db.session.query(func.max(Requirement.version)).filter(
         Requirement.requirement_id == requirement_form.requirement_node_id.data).one()[0]
-
     requirement_value = {
         'name': requirement_form.name.data,
         'description': requirement_form.description.data,
@@ -118,9 +117,11 @@ def make_requirements_list_with_parent_id(project_id: int) -> list:
         node_id = node.id
         if node.parent_id:
             parent_id = str(node.parent_id)
+            state = {'opened':True}
         else:
             parent_id = "#"
-        requirement_list.append({'id': str(node_id), 'parent': parent_id, 'text': requirement_chain})
+            state = {'opened': True, 'selected': True}
+        requirement_list.append({'id': str(node_id), 'parent': parent_id, 'text': requirement_chain, 'state':state})
 
     return requirement_list
 
@@ -179,6 +180,7 @@ def change_requirement_status(requirement_id, status_id):
     if status_id == Status.accept.value:
         drop_aproved_requirement(requirement.requirement_id)
         requirement.approve = True
+        requirement.release = False
 
     if status_id == Status.release.value:
         drop_release(requirement.requirement_id)
@@ -193,7 +195,6 @@ def drop_release(node_id):
         release_requirement.status_id = Status.change.value
         db.session.commit()
     except exc.NoResultFound:
-        print('!!!!')
         pass
 
 def drop_aproved_requirement(node_id):

@@ -29,12 +29,11 @@ def get_requirement_doc(project_id):
     requirement_doc = get_plain_requirement_text(project_id)
     return jsonify({'requirement_doc': requirement_doc})
 
-@blueprint.route('save', methods=['POST'])
+@blueprint.route('/save/', methods=['POST'])
 def save_requirement():
     requirement_form = RequirementForm()
     id = save_requirement_in_bd(requirement_form)
-    flash('Требование сохранено!')
-    return redirect(url_for('projects.view_project', project_id=requirement_form.project_id.data, id=requirement_form.project_id.data))
+    return {'id':id}
 
 @blueprint.route('accept/<requirement_id>')
 def accept(requirement_id):

@@ -29,7 +29,10 @@ def save_project_in_bd(form):
         description = f'Проект - "{form.name.data}"',
         created_date = datetime.utcnow(),
         update_date = datetime.utcnow(),
-        version = 1
+        version = 1,
+        status_id = 0,
+        approve = False,
+        release = False,
     )
 
     root_requirement_tree_node.requirements.append(root_requirement)

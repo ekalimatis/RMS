@@ -13,6 +13,9 @@ input.btn {
 
 #requirement_doc {
     text-align: justify;
+    font-size: small;
+    height:700px;
+    overflow:scroll
 }
 
 .form-group {
